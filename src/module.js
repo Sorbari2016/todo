@@ -79,4 +79,28 @@ console.log(project);
 
 addNewTodo("Fuck", "Fuck Suanle well", "12/06/2025", "high", 'I will do it', "yes"); 
 
-console.log("Lets continue"); 
+
+// Create a blueprint to create an empty folder
+class folder {
+    constructor(name) {
+        this.name = name; 
+    }
+}
+
+class newFolder extends folder{
+    constructor(name) {
+        super(name)
+    }
+    
+    folderList(){
+        const listOfTodos = []; 
+        return listOfTodos; 
+    }
+}
+
+
+function addNewFolder(name) {
+    const userFolder = new newFolder(name);  
+    return userFolder;  
+}
+
