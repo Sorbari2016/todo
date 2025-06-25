@@ -61,7 +61,7 @@ class todoList extends todoPriority {
         return options; 
     }
 
-    todoListDetails() {
+    listDetails() {
         return `${this.title}, ${this.description}, ${this.duedate}, ${this.note}, ${this.priorityLevel()}, ${this.checkOptions()}`; 
     }
 }
@@ -69,38 +69,71 @@ class todoList extends todoPriority {
 // Create default directory for the different todos
 const project = []; 
 
-// Create a function to help us create a new todo and add to the default directory
-function addNewTodo(title, description, dueDate, priority, note, checklist){
-    const newTodo = new todoList(title, description, dueDate, priority, note, checklist)
-    project.push(newTodo);  
-}
-
-console.log(project); 
-
-addNewTodo("Fuck", "Fuck Suanle well", "12/06/2025", "high", 'I will do it', "yes"); 
 
 
 // Create a blueprint to create an empty folder
 class folder {
-    constructor(name) {
-        this.name = name; 
+    constructor(title) {
+        this.title = title; 
+        this.lists = []; 
     }
 }
+
 
 class newFolder extends folder{
-    constructor(name) {
-        super(name)
+    constructor(title) {
+        super(title)
     }
+
     
-    folderList(){
-        const listOfTodos = []; 
-        return listOfTodos; 
+    folderLists(){
+        return this.lists;  
     }
 }
 
+// An Array for user defined projects
+const userProjects = []; 
 
-function addNewFolder(name) {
-    const userFolder = new newFolder(name);  
-    return userFolder;  
+function addNewFolder(title) {
+    const userFolder = new newFolder(title);  
+    userProjects.push(userFolder)
+    return userFolder;
 }
 
+// To track all the lists created
+const allTasks = []; 
+
+// Create a function to help us create a new todo and add to the default directory, or user defined. 
+function addNewTodo(title, description, dueDate, priority, note, checklist, projectName = "project"){
+    const newTodo = new todoList(title, description, dueDate, priority, note, checklist)
+    allTasks.push(newTodo);  // Keep here, so that all can be tracked. 
+    if (projectName !== "project") {
+        let targetFolder; 
+        
+        for (let i = 0; i < userProjects.length; i++) {
+            let folder = userProjects[i]; 
+            if (folder.title === projectName) {
+                targetFolder = folder; 
+
+            break 
+            }
+        }
+
+        if (targetFolder) {
+            targetFolder.lists.push(newTodo) 
+        } else {
+            alert(folder + " " + projectName + " " + "does not exist"); 
+        }
+    } else {
+        project.push(newTodo); // Default Project. 
+    }   
+}
+
+
+
+const firstFolder = addNewFolder("Music"); 
+const firstList = addNewTodo("Sing", 'Start a singing rehearsal', "06/03/2025","high"," i need to be good", 'yes', "Music"); 
+
+console.log(firstFolder); 
+
+console.log(allTasks); 
