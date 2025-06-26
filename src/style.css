@@ -1,5 +1,58 @@
- 
+ /*CSS RULES  */
 
- body {
-    background: yellow;
- }
+/* Basic Reset */
+* {
+   box-sizing: border-box;
+   padding: 0;
+   margin: 0;
+}
+
+/* HEADER RULES */
+
+img {
+   height: 1.5rem; 
+   width: 1.5rem;
+}
+
+img[alt="search icon"] {
+   height: 1rem;
+   width: 1rem;
+}
+
+.dfc {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+
+header {
+   display: grid; 
+   grid-template-columns: 1fr 2fr 1fr; 
+   gap: 1.5rem; 
+   padding: 15px 0 15px 15px;
+   justify-content: space-around;
+   align-items: center;
+}
+
+.right_header_icons {
+   gap : 1.8rem; 
+}
+
+input {
+   height: 1.5rem; 
+   width: 15rem ; 
+}
+
+.search_container {
+   background-color: yellow;
+   height: 2rem;
+   width: 20rem;
+   gap:5px; 
+   justify-content: flex-start;
+   padding-left:5px;
+}
+
+
+
+
