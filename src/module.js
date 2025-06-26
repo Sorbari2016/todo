@@ -91,9 +91,10 @@ class newFolder extends folder{
     }
 }
 
-// An Array for user defined projects
+// An Array to store user defined projects
 const userProjects = []; 
 
+// To add a new user defined folder
 function addNewFolder(title) {
     const userFolder = new newFolder(title);  
     userProjects.push(userFolder)
@@ -101,16 +102,17 @@ function addNewFolder(title) {
 }
 
 // To track all the lists created
-const allTasks = []; 
+const allTasks = [];  
 
-// Create a function to help us create a new todo and add to the default directory, or user defined. 
+// Create a function to help us create a new todo list, and add to the default directory, or user defined. 
 function addNewTodo(title, description, dueDate, priority, note, checklist, projectName = "project"){
     const newTodo = new todoList(title, description, dueDate, priority, note, checklist)
     allTasks.push(newTodo);  // Keep here, so that all can be tracked. 
     if (projectName !== "project") {
+        
         let targetFolder; 
         
-        for (let i = 0; i < userProjects.length; i++) {
+        for (let i = 0; i < userProjects.length; i++) {  // We find the folder the user filled, and save it. 
             let folder = userProjects[i]; 
             if (folder.title === projectName) {
                 targetFolder = folder; 
@@ -119,10 +121,10 @@ function addNewTodo(title, description, dueDate, priority, note, checklist, proj
             }
         }
 
-        if (targetFolder) {
+        if (targetFolder) {                        // We push the list to the list ppt of the folder. 
             targetFolder.lists.push(newTodo) 
         } else {
-            alert(folder + " " + projectName + " " + "does not exist"); 
+            alert(projectName + " " + "does not exist"); 
         }
     } else {
         project.push(newTodo); // Default Project. 
@@ -133,7 +135,3 @@ function addNewTodo(title, description, dueDate, priority, note, checklist, proj
 
 const firstFolder = addNewFolder("Music"); 
 const firstList = addNewTodo("Sing", 'Start a singing rehearsal', "06/03/2025","high"," i need to be good", 'yes', "Music"); 
-
-console.log(firstFolder); 
-
-console.log(allTasks); 
