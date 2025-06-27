@@ -7,11 +7,26 @@
    margin: 0;
 }
 
+/* Primary Padding */
+.pry_pad {
+   padding: 15px;
+}
+
+.sdy_pad {
+   padding: 10px;
+}
+
+/* Primary Margin */
+.pry_mgn {
+   margin-left: 15px;
+}
+
+
 /* HEADER RULES */
 
 img {
-   height: 1.5rem; 
-   width: 1.5rem;
+   height: 1.25rem; 
+   width: 1.25rem;
 }
 
 img[alt="search icon"] {
@@ -64,15 +79,11 @@ input {
 
 /* SIDE BAR RULES */
 .sidebar {
-   background-color: yellow;
+   background-color: grey;
    display: grid;
    grid-template-rows: repeat(2, 2fr) 0.5fr;
 }
 
-/* Primary Padding */
-.pry_pad {
-   padding: 15px;
-}
 
 
 /* Layout within the sections */
@@ -80,12 +91,6 @@ input {
    display: grid;
    grid-template-rows: repeat(4, 1fr);
    gap: 20px;
-}
-
-/* Rules for the images in the side bar */
-.sidebar img {
-   height: 1.25rem;
-   width: 1.25rem;
 }
 
 /* Rule for the sibe bar items */
@@ -112,7 +117,25 @@ footer {
    justify-content: space-around;
 }
 
+/* MAIN AREA RULES */
+/* Layout for the top ribbob */
+.ribbon1 {
+   background-color: yellow;
+   display: grid;
+   grid-template-columns: 1fr 2fr 1fr;
+   padding-top: 20px;
+}
 
+/* Rules for the right icons, Top */
+.right_icons {
+   display: flex;
+   justify-content: space-around;
+}
+
+/* Gap for the top ribbon */
+.ribbon1 .item {
+   gap: 0.5rem; 
+}
 
 
 
