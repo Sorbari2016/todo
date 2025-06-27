@@ -153,5 +153,24 @@ input[type = "radio"] {
    width: 1rem;
 }
 
+/* Layout for the bottom part of the second ribbon */
+.bottom {
+   display: grid;
+   grid-template-columns: 3fr 1fr;
+   align-items: center;
+   gap: 3rem;
+}
+
+/* Structure of the button */
+button {
+   height: 1.5rem; 
+   width: 2rem; 
+   justify-self: right;
+   margin-right: 1.5rem;
+}
+
+.ribbon {
+   margin-right: 15px;
+}
 
 
