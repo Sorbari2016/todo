@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>ToDo List Project</title>
+    <title>Todo List Project</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
 </head>
@@ -34,7 +34,7 @@
     <div class="container">
         <div id="main_content_area">
             <div class="sidebar">
-                <div class="upper_section">
+                <div class="upper_section pry_pad">
                     <div class="item tasks">
                         <img src="./images/add.png" alt="Add Task icon">
                         <p>Add Task</p>
@@ -54,20 +54,10 @@
                         <img src="./images/today.png" alt="Today's Task icon">
                         <p>Today</p>
                         <div></div>
-                        <div class="today_date">
-                            <p></p>
-                        </div>
-                        <div class="main_item">
-                            <img src="./images/arrow.png" alt="sort icon">
-                            <p>Sort</p>
-                        </div>
-                        <div class="main_item">
-                            <img src="./images/folder.png" alt="group icon">
-                            <p>Group</p>
-                        </div>
                     </div>
+                    <hr/>
                 </div>
-                <div class="lower_section">
+                <div class="lower_section pry_pad">
                     <p>My Project</p>
                     <img src="./images/project add.png" alt="add project icon">
                 </div>
@@ -81,15 +71,31 @@
                 </div>
             </div>
             <div class="main_area">
-                <div class="top_icons">
+                <div class="ribbon ribbon1">
                     <div class="today">
                         <img src="./images/sunny.png" alt="sunny day icon">
                         <p>Today</p>
                     </div>
+                    <div class="today_date">
+                        <p></p>
+                    </div>
+                    <div class="right_icons">
+                        <div class="rib_icon">
+                            <img src="./images/arrow.png" alt="sort icon">
+                            <p>Sort</p>
+                        </div>
+                        <div class="rib_icon">
+                            <img src="./images/folder.png" alt="group icon">
+                            <p>Group</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="new_task">
                     <div class="top">
-                        <input type="radio" placeholder="Add a task">
+                        <span>
+                            <input type="radio">
+                            <input type="text"placeholder="Add a task">
+                        </span>
                         <hr/>
                     </div>
                     <div class="bottom">

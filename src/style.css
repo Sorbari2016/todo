@@ -56,8 +56,62 @@ input {
 
 
 /* MAIN CONTENT AREA */
+/* Layout for the main content area */
+#main_content_area {
+   display: grid; 
+   grid-template-columns: 1.25fr 5fr;
+}
 
 /* SIDE BAR RULES */
+.sidebar {
+   background-color: yellow;
+   display: grid;
+   grid-template-rows: repeat(2, 2fr) 0.5fr;
+}
+
+/* Primary Padding */
+.pry_pad {
+   padding: 15px;
+}
+
+
+/* Layout within the sections */
+.upper_section, .lower_section {
+   display: grid;
+   grid-template-rows: repeat(4, 1fr);
+   gap: 20px;
+}
+
+/* Rules for the images in the side bar */
+.sidebar img {
+   height: 1.25rem;
+   width: 1.25rem;
+}
+
+/* Rule for the sibe bar items */
+.item {
+   display: flex;
+   gap: 1rem; 
+   align-items: center;
+}
+
+/* Positioning the second item of the lower section */
+.lower_section img {
+   grid-row: 4/5;
+   justify-self: right;
+}
+
+/* Push the footer icons down */
+.lower_section {
+   margin-bottom: 3rem;
+}
+
+/* Layout of the footer section, of the sidebar */
+footer {
+   display: flex;
+   justify-content: space-around;
+}
+
 
 
 
