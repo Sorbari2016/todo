@@ -44,6 +44,7 @@ input {
    width: 15rem ; 
 }
 
+
 .search_container {
    background-color: yellow;
    height: 2rem;
@@ -52,6 +53,13 @@ input {
    justify-content: flex-start;
    padding-left:5px;
 }
+
+
+/* MAIN CONTENT AREA */
+
+/* SIDE BAR RULES */
+
+
 
 
 
