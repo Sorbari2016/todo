@@ -11,7 +11,7 @@ class todo {
     constructor(title, description, dueDate, note) {
      this.title = title; 
      this.description = description; 
-     this.duedate = format(new Date(dueDate), "MM/dd/yyyy"); 
+     this.dueDate = format(new Date(dueDate), "MM/dd/yyyy"); 
      this.note = note; 
     }
 }
@@ -128,10 +128,13 @@ function addNewTodo(title, description, dueDate, priority, note, checklist, proj
         }
     } else {
         project.push(newTodo); // Default Project. 
-    }   
+    }  
+    return newTodo;  
 }
 
 
 
 const firstFolder = addNewFolder("Music"); 
-const firstList = addNewTodo("Sing", 'Start a singing rehearsal', "06/03/2025","high"," i need to be good", 'yes', "Music"); 
+const firstList = addNewTodo("Sing", 'Start a singing rehearsal', "06/03/2025","high"," i need to be good", 'yes', "Music");
+console.log(firstList.duedate);
+export default allTasks; 

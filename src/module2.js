@@ -1,8 +1,15 @@
 // MODULA FILE
+// Import the images 
+import sunnyIcon from './images/sunny.png'; 
+import sortIcon from "./images/arrow.png"; 
+import folderIcon from "./images/folder.png"; 
+import calendarIcon from "./images/calendar.png"; 
+import bellIcon from "./images/bell.png"; 
+import repeatIcon from "./images/repeat.png"; 
 
 
 const mainArea = document.querySelector(".main_area");
-const mainContentArea = document.getElementById("main_content_area"); 
+
 
 
 function clearMainArea() {
@@ -12,12 +19,13 @@ function clearMainArea() {
 // Build the Main Area Section
 
 function reLoadMainArea() {
-     
+ 
+    const mainContentArea = document.getElementById("main_content_area");
     mainArea.innerHTML = `
         <div class="main_area">
                 <div class="ribbon ribbon1 pry_mgn sdy_pad">
                     <div class="today item">
-                        <img src="./images/sunny.png" alt="sunny day icon">
+                        <img src="${sunnyIcon}" alt="sunny day icon">
                         <p>Today</p>
                     </div>
                     <div class="today_date">
@@ -25,11 +33,11 @@ function reLoadMainArea() {
                     </div>
                     <div class="right_icons">
                         <div class="rib_icon item">
-                            <img src="./images/arrow.png" alt="sort icon">
+                            <img src="${sortIcon}" alt="sort icon">
                             <p>Sort</p>
                         </div>
                         <div class="rib_icon item">
-                            <img src="./images/folder.png" alt="group icon">
+                            <img src="${folderIcon}" alt="group icon">
                             <p>Group</p>
                         </div>
                     </div>
@@ -44,9 +52,9 @@ function reLoadMainArea() {
                     <hr/>
                     <div class="bottom">
                         <div class="task_icons sdy_pad item">
-                            <img src="./images/calendar.png" alt="calendar">
-                            <img src="./images/bell.png" alt="notification icon">
-                            <img src="./images/repeat.png" alt="repeat icon">
+                            <img src="${calendarIcon}" alt="calendar">
+                            <img src="${bellIcon}" alt="notification icon">
+                            <img src="${repeatIcon}" alt="repeat icon">
                         </div>
                         <button type="submit">Add</button>
                     </div>
