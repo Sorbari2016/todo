@@ -133,8 +133,7 @@ function addNewTodo(title, description, dueDate, priority, note, checklist, proj
 }
 
 
-
 const firstFolder = addNewFolder("Music"); 
 const firstList = addNewTodo("Sing", 'Start a singing rehearsal', "06/03/2025","high"," i need to be good", 'yes', "Music");
-console.log(firstList.duedate);
 export default allTasks; 
+

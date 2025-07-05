@@ -6,10 +6,21 @@ import folderIcon from "./images/folder.png";
 import calendarIcon from "./images/calendar.png"; 
 import bellIcon from "./images/bell.png"; 
 import repeatIcon from "./images/repeat.png"; 
+import { format, compareAsc } from "date-fns";
 
 
+
+
+// Add the current day, & Date to the main area
+const thisDay = format(new Date(), "eeee");
+const currentDate = format(new Date(), "MMMM d"); 
+const currentDay = `${thisDay}, ${currentDate}`; 
+const todayDate = document.querySelector(".today_date");
+todayDate.textContent = currentDay; 
+ 
+
+// Select the main area node
 const mainArea = document.querySelector(".main_area");
-
 
 
 function clearMainArea() {
@@ -34,7 +45,7 @@ function reLoadMainArea() {
                     <div class="right_icons">
                         <div class="rib_icon item">
                             <img src="${sortIcon}" alt="sort icon">
-                            <p>Sort</p>
+                            <p id = "sort">Sort</p>
                         </div>
                         <div class="rib_icon item">
                             <img src="${folderIcon}" alt="group icon">
