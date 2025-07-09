@@ -69,12 +69,35 @@ searchInput.addEventListener("input", function(){
     retoreMainArea();
 })
 
+// Add click events to the main area click items 
+const mainUtilities = document.querySelectorAll(".click"); 
+for (let i = 0; i < mainUtilities.length; i++) {
+    mainUtilities[i].addEventListener("click", function() {
+        const itemClicked = this.getAttribute("id"); 
+        checkItemClicked(itemClicked); 
+    })
+}
+
+
+// Function to checked the button click,and run listener 
+function checkItemClicked(buttonID){
+    switch (buttonID) {
+        case "s":
+            sort(); 
+            break;
+        case "g":
+            group(); 
+        default:
+            break;
+    }
+}
+
 // The Main area Section
 // Sort icon
 
-const sort = document.querySelector('#sort'); 
-sort.addEventListener("click", function() { 
-const card = document.createElement("div");
+function sort() {
+    const sort = document.querySelector("#s"); 
+    const card = document.createElement("div");
     card.classList.add("card"); 
     card.innerHTML = `
         <h4>Sort by </h4>
@@ -87,11 +110,11 @@ const card = document.createElement("div");
         </ul>
     `;
     sort.appendChild(card); 
-}) 
+}
 
 // The Group icon
-const group = document.getElementById("group"); 
-group.addEventListener("click", function() {
+function group() {
+    const group = document.querySelector("#g"); 
     const card = document.createElement("div");
     card.classList.add("card"); 
     card.innerHTML = `
@@ -102,9 +125,10 @@ group.addEventListener("click", function() {
     </ul>
     `
     group.appendChild(card); 
-})
+}
 
-// Add List within the main Area
+
+
 const addTask = document.querySelector("input[type = 'text']"); 
 addTask.addEventListener("input", function(){
     const listTitle = addTask.value.trim(); 
