@@ -118,7 +118,7 @@ footer {
 }
 
 /* MAIN AREA RULES */
-/* Layout for the top ribbob */
+/* Layout for the top ribbon */
 .ribbon1 {
    display: grid;
    grid-template-columns: 1fr 2fr 1fr;
@@ -173,6 +173,15 @@ button {
    margin-right: 1.5rem;
 }
 
+.btn {
+   display: flex;
+   gap: 5px;
+   width: 5rem; 
+   justify-content: center;
+   align-items: center;
+   border: 0;
+}
+
 .ribbon {
    margin-right: 15px;
    cursor: pointer;
@@ -181,6 +190,7 @@ button {
 
 /* DYNAMIC CONTENT */
 
+/* Display rules for the Sort and Group subcontents */
 #sort_menu, 
 #group_menu {
    display: flex;
@@ -211,4 +221,6 @@ h4 {
    text-align: center;
    padding: 5px; 
 }
+
+
 

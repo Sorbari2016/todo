@@ -9,6 +9,7 @@ import sortIcon from "./images/arrow.png";
 import priorityIcon from "./images/priority_flag.png"; 
 import originDateIcon from "./images/creation.png"; 
 import categoryIcon from "./images/category.png"; 
+import { addNewTodo,addNewFolder } from "./module.js";
 
 
 import { clearMainArea, reLoadMainArea } from "./module2";
@@ -102,6 +103,22 @@ group.addEventListener("click", function() {
     `
     group.appendChild(card); 
 })
+
+// Add List within the main Area
+const addTask = document.querySelector("input[type = 'text']"); 
+addTask.addEventListener("input", function(){
+    const listTitle = addTask.value.trim(); 
+
+    const addBtn = document.querySelector("button[type = 'submit']");
+    addBtn.addEventListener("click", function(e) {
+        e.preventDefault(); 
+        addNewTodo(listTitle); 
+    })
+
+})
+
+console.log(allTasks); 
+
 
 
 
