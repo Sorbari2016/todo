@@ -14,18 +14,29 @@ import { addNewTodo,addNewFolder } from "./module.js";
 
 import { clearMainArea, reLoadMainArea } from "./module2";
 
+const mainArea = document.querySelector(".main_area");
+
+// Add input events to the inputs
+const inputs = document.querySelectorAll("input"); 
+for (let i = 0; i < inputs.length; i++ ) {
+    inputs[i].addEventListener("input", function() {
+        
+        const inputClicked = this.getAttribute("type"); 
+
+        checkItemClicked(inputClicked); 
+
+    });
+    
+}
 
 
-const searchInput = document.querySelector("input[type = 'search']"); 
-
-
-
-searchInput.addEventListener("input", function(){
+function search() {
+    const searchInput = document.querySelector("input[type = 'search']"); 
+    
     let searchItem = searchInput.value.trim();     
-
-    const mainArea = document.querySelector(".main_area");
         
     clearMainArea(); 
+
     if (searchItem.length < 1) {
         mainArea.innerHTML = `<p>Searching for " "</p>`; 
     } else {
@@ -56,18 +67,19 @@ searchInput.addEventListener("input", function(){
         `;
         mainArea.appendChild(taskElement);
     });
+}
+
 
     // Click anywhere you to get the main area back, if you dont want to search again
-    function retoreMainArea() {
-        if (searchItem.length < 1 ) {
-            document.firstElementChild.addEventListener("click", function() {
-                reLoadMainArea(); 
-            })
-        }
-    }
+    // function retoreMainArea() {
+    //     if (searchItem.length < 1 ) {
+    //         document.firstElementChild.addEventListener("click", function() {
+    //             reLoadMainArea(); 
+    //         })
+    //     }
+    // }
     
-    retoreMainArea();
-})
+
 
 // Add click events to the main area click items 
 const mainUtilities = document.querySelectorAll(".click"); 
@@ -87,8 +99,15 @@ function checkItemClicked(buttonID){
             break;
         case "g":
             group(); 
+        case "search":
+            search(); 
+        break; 
+        case "text": 
+            addNewTask(); 
+        case "checkbox":
+            tickTask(); 
         default:
-            break;
+        break;
     }
 }
 
