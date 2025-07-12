@@ -9,6 +9,7 @@ import sortIcon from "./images/arrow.png";
 import priorityIcon from "./images/priority_flag.png"; 
 import originDateIcon from "./images/creation.png"; 
 import categoryIcon from "./images/category.png"; 
+import importantIcon from "./images/important_icon.png"
 import { addNewTodo,addNewFolder } from "./module.js";
 
 
@@ -19,15 +20,19 @@ const mainArea = document.querySelector(".main_area");
 // Add input events to the inputs
 const inputs = document.querySelectorAll("input"); 
 for (let i = 0; i < inputs.length; i++ ) {
-    inputs[i].addEventListener("input", function() {
+    inputs[i].addEventListener("input", getInputID)
         
-        const inputClicked = this.getAttribute("type"); 
-
-        checkItemClicked(inputClicked); 
-
-    });
-    
 }
+
+function getInputID() {
+    const inputClicked = this.getAttribute("type"); 
+
+    checkItemClicked(inputClicked); 
+}
+
+// Remove the event Listener on the text input.
+const textInput = document.querySelectorAll("input")[2]; 
+textInput.removeEventListener("input", getInputID); 
 
 
 function search() {
@@ -41,7 +46,9 @@ function search() {
         mainArea.innerHTML = `<p>Searching for " "</p>`; 
     } else {
     mainArea.innerHTML = 
-    `<p>Searching for "${searchItem}"</P>`
+    `<p>Searching for "${searchItem}"</P>
+     <h3> Task </h3>`
+    
     }
 
     const searchLetters = searchItem.split(""); 
@@ -59,26 +66,74 @@ function search() {
         const taskElement = document.createElement("div");
         taskElement.classList.add("task_item");
         taskElement.innerHTML = `
-          <h3>Tasks</h3>
           <div class = "task_details">
+            <input type = "checkbox"> 
             <p>${task.title}
             <p>Deadline: ${task.dueDate}</p>
           </div>
         `;
-        mainArea.appendChild(taskElement);
+
+        mainArea.appendChild(taskElement); 
     });
 }
 
+// Track if enter or Add button has been clicked to add new task
+let addList = false; 
 
-    // Click anywhere you to get the main area back, if you dont want to search again
-    // function retoreMainArea() {
-    //     if (searchItem.length < 1 ) {
-    //         document.firstElementChild.addEventListener("click", function() {
-    //             reLoadMainArea(); 
-    //         })
-    //     }
-    // }
+// Function to add new list to main area
+addNewTask(); 
+
+function addNewTask(){
+    let textInput = document.querySelector("input[type = 'text']") 
+
+    document.addEventListener("keydown", function(event) {
+
+        if (event.key === 'Enter') {
+            if (textInput.value.length > 1 ) { 
+
+                const providedTitle = textInput.value.trim();
+                            
+                addNewTodo(providedTitle); 
+                addListTile(); 
+        
+                textInput.value = " "; 
+                
+            }        
+        }
+    })
     
+    const addBtn = document.getElementById("addBtn")
+    addBtn.addEventListener("click", function(event){
+        
+        let providedTitle = textInput.value.trim();
+                
+        addNewTodo(providedTitle); 
+        addListTile();
+        
+        textInput.value = " "; 
+        
+    }); 
+
+    function addListTile() {
+        let targetList, providedTitle = textInput.value.trim(); 
+        for (let i = 0; i < allTasks.length; i++){
+            let createdList = allTasks[i]; 
+            if (createdList.title === providedTitle ) {
+                targetList = createdList; 
+                const container = document.createElement("div"); 
+                container.setAttribute("class", "ribbon ribbon3"); 
+                container.innerHTML = `
+                        <input type = "checkbox"> 
+                        <p>${targetList.title}</p>
+                        <img src = '${importantIcon}'>` 
+                mainArea.appendChild(container); 
+            }
+        }
+            
+        
+    }
+
+}
 
 
 // Add click events to the main area click items 
@@ -99,13 +154,10 @@ function checkItemClicked(buttonID){
             break;
         case "g":
             group(); 
+            break; 
         case "search":
             search(); 
         break; 
-        case "text": 
-            addNewTask(); 
-        case "checkbox":
-            tickTask(); 
         default:
         break;
     }
@@ -148,26 +200,8 @@ function group() {
 
 
 
-const addTask = document.querySelector("input[type = 'text']"); 
-addTask.addEventListener("input", function(){
-    const listTitle = addTask.value.trim(); 
-
-    const addBtn = document.querySelector("button[type = 'submit']");
-    addBtn.addEventListener("click", function(e) {
-        e.preventDefault(); 
-        addNewTodo(listTitle); 
-    })
-
-})
 
 console.log(allTasks); 
-
-
-
-
-
-// There are going to be lots of event listeners, so we dont 
-// need to run them individually. 
 
 
 
