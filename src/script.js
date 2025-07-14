@@ -1,42 +1,42 @@
 // DOM STUFFS
 
-// Header Section
-// The Search bar
-
+// Import statements
 import allTasks from "./module.js";
-import calendarIcon from "./images/calendar.png"; 
-import sortIcon from "./images/arrow.png"; 
+import calendarIcon from "./images/calendar.png";
+import descriptionIcon from "./images/description.png"; 
+import notesICon from "./images/notes.png"; 
+import plusIcon from "./images/add.png"; 
 import priorityIcon from "./images/priority_flag.png"; 
 import originDateIcon from "./images/creation.png"; 
 import categoryIcon from "./images/category.png"; 
 import importantIcon from "./images/important_icon.png"
 import { addNewTodo,addNewFolder } from "./module.js";
+import { format, compareAsc } from "date-fns";
+import { clearMainArea,mainArea} from "./module2";
+import { constructFromSymbol } from "date-fns/constants";
 
 
-import { clearMainArea, reLoadMainArea } from "./module2";
+// Header Section
+// The Search bar
 
-const mainArea = document.querySelector(".main_area");
+// Add input events to the search and text inputs
+const searchInput = document.querySelector("input[type = 'search']"), 
+textInput = document.querySelector("input[type = 'text']"); 
 
-// Add input events to the inputs
-const inputs = document.querySelectorAll("input"); 
-for (let i = 0; i < inputs.length; i++ ) {
-    inputs[i].addEventListener("input", getInputID)
-        
+const mainInputs = [searchInput, textInput]; 
+ 
+for (let i = 0; i < mainInputs.length; i++ ) {
+    mainInputs[i].addEventListener("input", function() {
+
+        const inputClicked = this.getAttribute("type"); 
+
+        checkItemClicked(inputClicked); 
+    });        
+    
 }
+ 
 
-function getInputID() {
-    const inputClicked = this.getAttribute("type"); 
-
-    checkItemClicked(inputClicked); 
-}
-
-// Remove the event Listener on the text input.
-const textInput = document.querySelectorAll("input")[2]; 
-textInput.removeEventListener("input", getInputID); 
-
-
-function search() {
-    const searchInput = document.querySelector("input[type = 'search']"); 
+function search() { 
     
     let searchItem = searchInput.value.trim();     
         
@@ -77,23 +77,21 @@ function search() {
     });
 }
 
-// Track if enter or Add button has been clicked to add new task
-let addList = false; 
+//Track if tile has been clicked
+let tileClick = false; 
+
 
 // Function to add new list to main area
-addNewTask(); 
+addNewTask();
+
 
 function addNewTask(){
-    let textInput = document.querySelector("input[type = 'text']") 
-
     document.addEventListener("keydown", function(event) {
 
         if (event.key === 'Enter') {
             if (textInput.value.length > 1 ) { 
-
-                const providedTitle = textInput.value.trim();
                             
-                addNewTodo(providedTitle); 
+                addNewTodo(textInput.value.trim());  
                 addListTile(); 
         
                 textInput.value = " "; 
@@ -104,36 +102,46 @@ function addNewTask(){
     
     const addBtn = document.getElementById("addBtn")
     addBtn.addEventListener("click", function(event){
-        
-        let providedTitle = textInput.value.trim();
                 
-        addNewTodo(providedTitle); 
+        addNewTodo(textInput.value.trim()); 
         addListTile();
         
         textInput.value = " "; 
         
     }); 
 
-    function addListTile() {
-        let targetList, providedTitle = textInput.value.trim(); 
-        for (let i = 0; i < allTasks.length; i++){
-            let createdList = allTasks[i]; 
-            if (createdList.title === providedTitle ) {
-                targetList = createdList; 
+    function addListTile() { 
+        // Track last added list, and the last input.
+        const lastAddedList = allTasks[allTasks.length - 1 ], 
+        providedTitle = textInput.value.trim();        
+            if (lastAddedList.title === providedTitle ) {
+
                 const container = document.createElement("div"); 
-                container.setAttribute("class", "ribbon ribbon3"); 
+                Object.assign(container, {
+                    className:"ribbon ribbon3 pry_mgn pry_pad"
+                }) 
                 container.innerHTML = `
+                    <div class = "title item">
                         <input type = "checkbox"> 
-                        <p>${targetList.title}</p>
-                        <img src = '${importantIcon}'>` 
+                        <p>${lastAddedList.title}</p>
+                    </div>
+                    <div class = "imp">
+                        <img src = '${importantIcon}'>
+                    </div>` 
+        
                 mainArea.appendChild(container); 
+
+                // Add a click event to the tile created dynamically
+                    const tile = document.querySelector(".ribbon3"); 
+                    tile.addEventListener("click", addListDetails); 
             }
-        }
+        
             
         
     }
 
 }
+
 
 
 // Add click events to the main area click items 
@@ -144,6 +152,88 @@ for (let i = 0; i < mainUtilities.length; i++) {
         checkItemClicked(itemClicked); 
     })
 }
+
+
+//To view/Add list details
+function addListDetails() {
+    const ribbon2 = document.querySelector(".ribbon2");
+    ribbon2.innerHTML = " ";
+    ribbon2.innerHTML =
+    `<div class = "ribbon ribbon4 item pry_mgn sdy_pad">
+            <button class = "btn click">  
+                <img src = "${plusIcon}" alt = "add icon"> 
+                Add a New Task
+                </button> 
+            </div>`
+
+    const ribbon = document.querySelector(".ribbon"), 
+    ribbon3 = document.querySelector(".ribbon3");
+
+    const main = document.createElement("div"); 
+    const leftMain = document.createElement("div"), 
+    rightMain = document.createElement("div"); 
+
+    main.classList.add("main"), leftMain.classList.add("left_main"), 
+    rightMain.classList.add("right_main")
+
+    const lastAddedList = allTasks[allTasks.length -1 ];   
+    lastAddedList.description = provideDescription
+    const provideDescription = document.querySelectorAll("input[type = 'textarea']")[0].value; 
+    
+
+    rightMain.innerHTML = 
+    `<div id = "list_header" class = "details">
+        <span>
+            <button type = "type">
+                <input type = "checkbox">
+            </button>
+            <p>${lastAddedList.title}</p>
+            <img src = "${importantIcon}">
+        </span> 
+    </div>
+    <div class = "details">
+        <span> 
+            <button type = "button"> 
+                <img src = "${descriptionIcon}">
+            </button>
+            <input type = "textarea" placeholder = "Description">
+        </span>
+    </div>
+    <div class = "details">
+        <span> 
+            <button type = "button"> 
+                <img src = "${calendarIcon}">
+            </button>
+            <input type = "textarea" placeholder ="Add Due Date">
+        </span>
+    </div>
+    <div id = "note" class = "details">
+        <span> 
+            <button type = "button"> 
+                <img src = "${notesICon}">
+            </button>
+            <input type = "textarea" placeholder = "Add Note">
+        </span>
+    </div>
+    <div id = "priority" class = "details">
+        <span> 
+            <button type = "button"> 
+                <img src = "${priorityIcon}">
+            </button>
+            <select>
+                <option value ="top">Top priority</option>
+                <option value "medium">Medium priority</option>
+                <option value = "low">Low priority</option>
+            </select>
+        </span>
+    </div>
+    `
+
+    mainArea.appendChild(main); 
+    main.append(leftMain, rightMain); 
+    leftMain.append(ribbon, ribbon2, ribbon3); 
+}
+
 
 
 // Function to checked the button click,and run listener 
@@ -157,7 +247,7 @@ function checkItemClicked(buttonID){
             break; 
         case "search":
             search(); 
-        break; 
+        break;  
         default:
         break;
     }
@@ -174,7 +264,7 @@ function sort() {
         <h4>Sort by </h4>
         <hr/>
         <ul id = "sort_menu">
-            <li class = "item pry_pd"><img src="${sortIcon}" alt = "sort icon">Aphabetically</li>
+            <li class = "item pry_pd"><img src="${sortIcon}" alt = "sort icon">Alphabetically</li>
             <li class = "item pry_pd"><img src = "${calendarIcon}" alt= "calendar_icon">Deadline</li>
             <li class = "item pry_pd"><img src = "${priorityIcon}" alt = "">Priority</li>
             <li class = "item pry_pd"><img src = "${originDateIcon}" alt = "">Creation Date</li>
@@ -182,6 +272,7 @@ function sort() {
     `;
     sort.appendChild(card); 
 }
+
 
 // The Group icon
 function group() {
@@ -199,9 +290,6 @@ function group() {
 }
 
 
-
-
-console.log(allTasks); 
 
 
 

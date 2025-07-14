@@ -1,5 +1,6 @@
 
-// APP LOGIC
+// APP LOGIC I
+// Creating the bluprints, and major creation methods. 
 
 import { format, compareAsc } from "date-fns";
 

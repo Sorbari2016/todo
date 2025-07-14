@@ -1,4 +1,5 @@
-// MODULA FILE
+// APP LOGIC II 
+
 // Import the images 
 import sunnyIcon from './images/sunny.png'; 
 import sortIcon from "./images/arrow.png"; 
@@ -7,7 +8,6 @@ import calendarIcon from "./images/calendar.png";
 import bellIcon from "./images/bell.png"; 
 import repeatIcon from "./images/repeat.png"; 
 import { format, compareAsc } from "date-fns";
-
 
 
 
@@ -76,4 +76,4 @@ function reLoadMainArea() {
 }
 
 // Export the functions
-export {reLoadMainArea, clearMainArea}; 
+export {reLoadMainArea, clearMainArea, mainArea, sunnyIcon, todayDate, currentDay, sortIcon, folderIcon}; 

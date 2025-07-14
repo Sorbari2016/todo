@@ -182,6 +182,10 @@ button {
    border: 0;
 }
 
+.ribbon4 .btn {
+   width: 10rem;
+}
+
 .ribbon {
    margin-right: 15px;
    cursor: pointer;
@@ -222,5 +226,28 @@ h4 {
    padding: 5px; 
 }
 
+.ribbon3 {
+   display: grid;
+   margin-top: 1rem;
+   grid-template-columns:  1fr 1fr;
+   gap: 5rem; 
+   background-color: yellow;
+   height: 3rem;
+   align-items: center;
+}
+
+.ribbon4 {
+   background-color: yellow; 
+}
+
+.main {
+   display: grid;
+   grid-template-columns: 2fr 1fr;
+}
+
+.imp {
+   justify-self: right;
+   padding-right: 1rem;
+}
 
 
