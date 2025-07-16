@@ -9,10 +9,11 @@ import plusIcon from "./images/add.png";
 import priorityIcon from "./images/priority_flag.png"; 
 import originDateIcon from "./images/creation.png"; 
 import categoryIcon from "./images/category.png"; 
-import importantIcon from "./images/important_icon.png"
+import importantIcon from "./images/important_icon.png"; 
+import deleteIcon from "./images/trash.png"; 
 import { addNewTodo,addNewFolder } from "./module.js";
 import { format, compareAsc } from "date-fns";
-import { clearMainArea,mainArea} from "./module2";
+import { clearMainArea,mainArea, sortIcon} from "./module2";
 import { constructFromSymbol } from "date-fns/constants";
 
 
@@ -121,13 +122,18 @@ function addNewTask(){
                     className:"ribbon ribbon3 pry_mgn pry_pad"
                 }) 
                 container.innerHTML = `
+                <div class = "list-title item">
                     <div class = "title item">
                         <input type = "checkbox"> 
                         <p>${lastAddedList.title}</p>
                     </div>
-                    <div class = "imp">
+                    <button type = "button">
                         <img src = '${importantIcon}'>
-                    </div>` 
+                    </button>
+                </div>
+                <div class = "other-details">
+                </div>`
+            
         
                 mainArea.appendChild(container); 
 
@@ -153,6 +159,8 @@ for (let i = 0; i < mainUtilities.length; i++) {
     })
 }
 
+// Track the most recent added list
+let lastAddedList; 
 
 //To view/Add list details
 function addListDetails() {
@@ -169,23 +177,22 @@ function addListDetails() {
     const ribbon = document.querySelector(".ribbon"), 
     ribbon3 = document.querySelector(".ribbon3");
 
-    const main = document.createElement("div"); 
-    const leftMain = document.createElement("div"), 
+    const main = document.createElement("div"),
+    leftMain = document.createElement("div"), 
     rightMain = document.createElement("div"); 
 
-    main.classList.add("main"), leftMain.classList.add("left_main"), 
-    rightMain.classList.add("right_main")
 
-    const lastAddedList = allTasks[allTasks.length -1 ];   
-    lastAddedList.description = provideDescription
-    const provideDescription = document.querySelectorAll("input[type = 'textarea']")[0].value; 
-    
+    main.classList.add("main"), leftMain.classList.add("left_main"), 
+    rightMain.classList.add("right_main"); 
+
+    lastAddedList = allTasks[allTasks.length -1 ];   
+     
 
     rightMain.innerHTML = 
     `<div id = "list_header" class = "details">
         <span>
             <button type = "type">
-                <input type = "checkbox">
+                <input type = "checkbox" id = "checklist">
             </button>
             <p>${lastAddedList.title}</p>
             <img src = "${importantIcon}">
@@ -196,7 +203,7 @@ function addListDetails() {
             <button type = "button"> 
                 <img src = "${descriptionIcon}">
             </button>
-            <input type = "textarea" placeholder = "Description">
+            <input type = "textarea" id = "description" placeholder = "Description">
         </span>
     </div>
     <div class = "details">
@@ -204,34 +211,84 @@ function addListDetails() {
             <button type = "button"> 
                 <img src = "${calendarIcon}">
             </button>
-            <input type = "textarea" placeholder ="Add Due Date">
+            <input type = "text" placeholder ="Add Due Date">
         </span>
     </div>
-    <div id = "note" class = "details">
+    <div class = "details">
         <span> 
             <button type = "button"> 
                 <img src = "${notesICon}">
             </button>
-            <input type = "textarea" placeholder = "Add Note">
+            <input type = "textarea" id = "note" placeholder = "Add Note">
         </span>
     </div>
-    <div id = "priority" class = "details">
+    <div class = "details">
         <span> 
             <button type = "button"> 
                 <img src = "${priorityIcon}">
             </button>
-            <select>
+            <select id = "priority">
                 <option value ="top">Top priority</option>
                 <option value "medium">Medium priority</option>
                 <option value = "low">Low priority</option>
             </select>
         </span>
     </div>
-    `
+    <hr/>
+    <div id = "footer">
+        <footer>
+            <span>
+                <div class = "date_created">
+                    <p></p>
+                </div>
+                <button type = "button">
+                    <img src = "${deleteIcon}">
+                </button> 
+            </span>
+        </footer>
+    </div>
+    ` 
+
 
     mainArea.appendChild(main); 
+
     main.append(leftMain, rightMain); 
     leftMain.append(ribbon, ribbon2, ribbon3); 
+
+    const textareaInputs = document.querySelectorAll("input[type = 'textarea']"); 
+
+    // Add keyboard event to save a details 
+    for (let i = 0; i < textareaInputs.length; i++) {
+        textareaInputs[i].addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+    
+                const fieldFilled = this.getAttribute("id"); 
+                updateList(fieldFilled); 
+            }
+        })
+    }
+
+    function updateList(listdetails) {
+
+        const details = document.getElementById(listdetails)
+        lastAddedList = allTasks[allTasks.length -1]; 
+        lastAddedList[listdetails] = details.value; 
+         
+
+        switch (listdetails) {
+            case "description":     
+                details.value = details.ariaPlaceholder;    
+                      
+                break;
+        
+            default:
+                break;
+        }
+
+    }
+   
+    
+
 }
 
 
@@ -289,6 +346,8 @@ function group() {
     group.appendChild(card); 
 }
 
+
+console.log(allTasks); 
 
 
 

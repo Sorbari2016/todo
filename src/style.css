@@ -226,14 +226,10 @@ h4 {
    padding: 5px; 
 }
 
-.ribbon3 {
-   display: grid;
-   margin-top: 1rem;
-   grid-template-columns:  1fr 1fr;
-   gap: 5rem; 
+.ribbon3 {  
    background-color: yellow;
+   margin-top: 1rem;
    height: 3rem;
-   align-items: center;
 }
 
 .ribbon4 {
@@ -245,9 +241,20 @@ h4 {
    grid-template-columns: 2fr 1fr;
 }
 
-.imp {
-   justify-self: right;
+.list-title {
+   display: grid;
+   grid-template-columns:  1fr 1fr;
+   gap: 5rem;
+}
+
+
+.list-title button {
+   justify-self: flex-end; 
    padding-right: 1rem;
+}
+
+.right_main {
+   background-color: yellow;
 }
 
 
