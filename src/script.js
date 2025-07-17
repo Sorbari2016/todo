@@ -82,8 +82,22 @@ function search() {
 let tileClick = false; 
 
 
+
+// Create and select a third ribbon, append to main area.
+const container = document.createElement("div"); 
+                Object.assign(container, {
+                    className:"ribbon ribbon3 pry_mgn pry_pad"
+                })
+mainArea.appendChild(container); 
+container.style.visibility = "hidden"; 
+
+
+ const tile = document.querySelector(".ribbon3"); 
+
+
 // Function to add new list to main area
 addNewTask();
+
 
 
 function addNewTask(){
@@ -115,14 +129,10 @@ function addNewTask(){
         // Track last added list, and the last input.
         const lastAddedList = allTasks[allTasks.length - 1 ], 
         providedTitle = textInput.value.trim();        
-            if (lastAddedList.title === providedTitle ) {
-
-                const container = document.createElement("div"); 
-                Object.assign(container, {
-                    className:"ribbon ribbon3 pry_mgn pry_pad"
-                }) 
+            if (lastAddedList.title === providedTitle ) { 
+                container.style.visibility = "visible"; 
                 container.innerHTML = `
-                <div class = "list-title item">
+                <div class = "list-title">
                     <div class = "title item">
                         <input type = "checkbox"> 
                         <p>${lastAddedList.title}</p>
@@ -133,12 +143,8 @@ function addNewTask(){
                 </div>
                 <div class = "other-details">
                 </div>`
-            
-        
-                mainArea.appendChild(container); 
 
                 // Add a click event to the tile created dynamically
-                    const tile = document.querySelector(".ribbon3"); 
                     tile.addEventListener("click", addListDetails); 
             }
         
@@ -164,6 +170,9 @@ let lastAddedList;
 
 //To view/Add list details
 function addListDetails() {
+    // Remove click event from the tile 
+    tile.removeEventListener("click", addListDetails); 
+
     const ribbon2 = document.querySelector(".ribbon2");
     ribbon2.innerHTML = " ";
     ribbon2.innerHTML =
@@ -192,7 +201,7 @@ function addListDetails() {
     `<div id = "list_header" class = "details">
         <span>
             <button type = "type">
-                <input type = "checkbox" id = "checklist">
+                <input type = "checkbox" id = "checklist" class = "change">
             </button>
             <p>${lastAddedList.title}</p>
             <img src = "${importantIcon}">
@@ -211,7 +220,7 @@ function addListDetails() {
             <button type = "button"> 
                 <img src = "${calendarIcon}">
             </button>
-            <input type = "text" placeholder ="Add Due Date">
+            <input type = "date" placeholder ="Add Due Date" class = "change">
         </span>
     </div>
     <div class = "details">
@@ -227,7 +236,7 @@ function addListDetails() {
             <button type = "button"> 
                 <img src = "${priorityIcon}">
             </button>
-            <select id = "priority">
+            <select id = "priority" class = "change">
                 <option value ="top">Top priority</option>
                 <option value "medium">Medium priority</option>
                 <option value = "low">Low priority</option>
@@ -268,7 +277,21 @@ function addListDetails() {
         })
     }
 
+    // Add change events
+    const changeElements = document.querySelectorAll(".change"); 
+    for (let i = 0; i < changeElements.length; i++) {
+        changeElements[i].addEventListener("change", function(){
+            const detailField = this.getAttribute("id"); 
+
+            updateList(detailField); 
+        })
+    }
+
     function updateList(listdetails) {
+
+        const otherDetails = document.querySelector(".other-details"), addedDetails 
+        = document.createElement("p"); 
+        otherDetails.append(addedDetails); 
 
         const details = document.getElementById(listdetails)
         lastAddedList = allTasks[allTasks.length -1]; 
@@ -278,9 +301,12 @@ function addListDetails() {
         switch (listdetails) {
             case "description":     
                 details.value = details.ariaPlaceholder;    
-                      
+                addedDetails.textContent = lastAddedList[listdetails];       
                 break;
-        
+                case "note":     
+                details.value = details.ariaPlaceholder;    
+                addedDetails.textContent = lastAddedList[listdetails];       
+                break;
             default:
                 break;
         }
