@@ -234,9 +234,9 @@ function addListDetails() {
             </button>
             <select id = "priority" class = "change">
                 <option value = "none"></option>
-                <option value ="high">Top priority</option>
-                <option value ="medium">Medium priority</option>
-                <option value = "low">Low priority</option>
+                <option value ="Top priority">Top priority</option>
+                <option value ="Medium priority">Medium priority</option>
+                <option value = "Low priority">Low priority</option>
             </select>
         </span>
     </div>
@@ -299,7 +299,7 @@ function addListDetails() {
         if (listProperty === "dueDate") {                     // Reset the inputs
             details.value = format(new Date(), "yyyy-MM-dd")
         } else if (listProperty === "priority") {
-
+            
         } else {
             details.value = details.ariaPlaceholder;
         }
@@ -365,5 +365,6 @@ function group() {
 
 
 console.log(allTasks); 
+console.log(allTasks[allTasks.length - 1].listDetails().title); 
 
 

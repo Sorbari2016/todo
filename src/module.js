@@ -9,41 +9,18 @@ import { format, compareAsc } from "date-fns";
 
 //Create a blueprint for the list objects
 class Todo {
-    constructor(title, description, dueDate, note) {
+    constructor(title, description, dueDate, note, priority) {
      this.title = title; 
      this.description = description; 
      this.dueDate = format(new Date(dueDate), "MM/dd/yyyy"); 
      this.note = note; 
+     this.priority = priority; 
     }
 }
 
-class TodoPriority extends Todo {
-    constructor(title, description, dueDate, note, priority) {
-        super(title, description, dueDate, note)
-        this.priority = priority; 
-    }    
-    
-    priorityLevel() {
-        let priorityStatus; 
-        
-        if (this.priority === "high") {
-            priorityStatus = "Top priority"; 
-        } else if (this.priority === "medium") {
-            priorityStatus = "Medium priority"; 
-        } else if (this.priority === "low") {
-            priorityStatus = "Low priority"; 
-        } else {
-            priorityStatus = "Invalid priority"; 
-        }
-        
-        return priorityStatus
-    }
-        
-}
 
-
-class TodoList extends TodoPriority {
-    constructor(title, description, dueDate, priority, note, checklist) {
+class TodoList extends Todo {
+    constructor(title, description, dueDate, note, priority, checklist) {
         super(title, description, dueDate, note, priority);
 
     this.checklist = checklist;      
@@ -137,7 +114,6 @@ function addNewTodo(title,
 
 const firstFolder = addNewFolder("Music"); 
 const firstList = addNewTodo("Sing", 'Start a singing rehearsal', "06/03/2025","high"," i need to be good", 'yes', "Music");
-console.log(firstList.priorityLevel()); 
 const secondList = addNewTodo("Fuck"); 
 export default allTasks; 
 export {addNewFolder, addNewTodo}; 
