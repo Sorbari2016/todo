@@ -54,16 +54,15 @@ class TodoList extends TodoPriority {
     
         if (this.checklist === "yes") {
             options = "Done"; 
-        } else if ( this.checklist === "no") {
-            options = "Not Done"; 
         } else {
-            options = "Invalid check"; 
+            options = "Not Done";
         }
         return options; 
     }
 
     listDetails() {
-        return `${this.title}, ${this.description}, ${this.duedate}, ${this.note}, ${this.priorityLevel()}, ${this.checkOptions()}`; 
+        return `${this.title}, ${this.description}, ${this.duedate}, 
+        ${this.note}, ${this.priorityLevel()}, ${this.checkOptions()}`; 
     }
 }
 

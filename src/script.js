@@ -12,7 +12,7 @@ import categoryIcon from "./images/category.png";
 import importantIcon from "./images/important_icon.png"; 
 import deleteIcon from "./images/trash.png"; 
 import { addNewTodo,addNewFolder } from "./module.js";
-import { format, compareAsc } from "date-fns";
+import { format, compareAsc, add, differenceInCalendarDays } from "date-fns";
 import { clearMainArea,mainArea, sortIcon} from "./module2";
 import { constructFromSymbol } from "date-fns/constants";
 
@@ -129,17 +129,17 @@ function addNewTask(){
             if (lastAddedList.title === providedTitle ) { 
                 container.style.visibility = "visible"; 
                 container.innerHTML = `
-                <div class = "list-title">
-                    <div class = "title item">
-                        <input type = "checkbox"> 
-                        <p>${lastAddedList.title}</p>
+                    <div class = "list-title">
+                        <div class = "title item">
+                            <input type = "checkbox"> 
+                            <p>${lastAddedList.title}</p>
+                        </div>
+                        <button type = "button">
+                            <img src = '${importantIcon}'>
+                        </button>
                     </div>
-                    <button type = "button">
-                        <img src = '${importantIcon}'>
-                    </button>
-                </div>
-                <div class = "other-details">
-                </div>`
+                    <div class = "other-details">
+                    </div>`
 
                 
                     tile.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
@@ -166,6 +166,9 @@ for (let i = 0; i < mainUtilities.length; i++) {
 function addListDetails() {
      
     tile.removeEventListener("click", addListDetails); // Remove click event from the tile 
+    tile.style.height   = "10rem"; 
+    const titleheading = document.querySelector(".list-title p"); 
+    titleheading.style.fontWeight = "bold"; 
 
     const ribbon2 = document.querySelector(".ribbon2");
     ribbon2.innerHTML = " ";
@@ -196,7 +199,7 @@ function addListDetails() {
             <button type = "type">
                 <input type = "checkbox" id = "checklist" class = "change">
             </button>
-            <p>${lastAddedList.title}</p>
+            <h4>${lastAddedList.title}</h4>
             <img src = "${importantIcon}">
         </span> 
     </div>
@@ -230,8 +233,9 @@ function addListDetails() {
                 <img src = "${priorityIcon}">
             </button>
             <select id = "priority" class = "change">
-                <option value ="top">Top priority</option>
-                <option value "medium">Medium priority</option>
+                <option value = "none"></option>
+                <option value ="high">Top priority</option>
+                <option value ="medium">Medium priority</option>
                 <option value = "low">Low priority</option>
             </select>
         </span>
@@ -279,37 +283,30 @@ function addListDetails() {
         })
     }
 
-    function updateList(listdetails) {   // Method to update the created list.  
-
-        const otherDetails = document.querySelector(".other-details"), addedDetails 
-        = document.createElement("p"); 
+// Method to update the created list. 
+    function updateList(listProperty) {    
+        const otherDetails = document.querySelector(".other-details"), 
+        addedDetails  = document.createElement("p"); 
         otherDetails.append(addedDetails); 
 
-        const details = document.getElementById(listdetails)
+        const details = document.getElementById(listProperty)
         lastAddedList = allTasks[allTasks.length -1]; 
-        lastAddedList[listdetails] = details.value; 
+        lastAddedList[listProperty] = details.value; 
+
+        
+        addedDetails.textContent = lastAddedList[listProperty]; // Add updated details to tile
+       
+        if (listProperty === "dueDate") {                     // Reset the inputs
+            details.value = format(new Date(), "yyyy-MM-dd")
+        } else if (listProperty === "priority") {
+
+        } else {
+            details.value = details.ariaPlaceholder;
+        }
          
 
-        switch (listdetails) {
-            case "description":     
-                details.value = details.ariaPlaceholder;    
-                addedDetails.textContent = lastAddedList[listdetails];       
-                break;
-                case "note":     
-                details.value = details.ariaPlaceholder;    
-                addedDetails.textContent = lastAddedList[listdetails];       
-                break;
-                case "dueDate":
-                details.value = format(new Date(), "yyyy-MM-dd")
-                addedDetails.textContent = lastAddedList[listdetails]; 
-
-            default:
-                break;
-        }
-
     }
-   
-    
+     
 
 }
 
@@ -368,7 +365,5 @@ function group() {
 
 
 console.log(allTasks); 
-
-
 
 
