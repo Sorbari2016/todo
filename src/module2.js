@@ -30,8 +30,6 @@ function clearMainArea() {
 // Build the Main Area Section
 
 function reLoadMainArea() {
- 
-    const mainContentArea = document.getElementById("main_content_area");
     mainArea.innerHTML = `
         <div class="main_area">
                 <div class="ribbon ribbon1 pry_mgn sdy_pad">
@@ -71,7 +69,8 @@ function reLoadMainArea() {
                     </div>
                 </div>
             </div>`
-
+    
+    const mainContentArea = document.getElementById("main_content_area");
      mainContentArea.appendChild(mainArea);
 }
 

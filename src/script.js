@@ -17,8 +17,7 @@ import { clearMainArea,mainArea, sortIcon} from "./module2";
 import { constructFromSymbol } from "date-fns/constants";
 
 
-// Header Section
-// The Search bar
+// The search, & first text inputs. 
 
 // Add input events to the search and text inputs
 const searchInput = document.querySelector("input[type = 'search']"), 
@@ -36,7 +35,7 @@ for (let i = 0; i < mainInputs.length; i++ ) {
     
 }
  
-
+// Method to run the search. 
 function search() { 
     
     let searchItem = searchInput.value.trim();     
@@ -78,10 +77,6 @@ function search() {
     });
 }
 
-//Track if tile has been clicked
-let tileClick = false; 
-
-
 
 // Create and select a third ribbon, append to main area.
 const container = document.createElement("div"); 
@@ -92,16 +87,17 @@ mainArea.appendChild(container);
 container.style.visibility = "hidden"; 
 
 
- const tile = document.querySelector(".ribbon3"); 
+const tile = document.querySelector(".ribbon3"); 
 
 
-// Function to add new list to main area
-addNewTask();
+addNewTask(); // Run add new list method
 
+// Track last added list, and the last input.
+let lastAddedList, providedTitle; 
 
-
+// Method to add new list to main area
 function addNewTask(){
-    document.addEventListener("keydown", function(event) {
+    document.addEventListener("keydown", function(event) {  // Add keydown event,listen for Enter
 
         if (event.key === 'Enter') {
             if (textInput.value.length > 1 ) { 
@@ -116,7 +112,7 @@ function addNewTask(){
     })
     
     const addBtn = document.getElementById("addBtn")
-    addBtn.addEventListener("click", function(event){
+    addBtn.addEventListener("click", function(event){ //Add click event, listen to click on 'Add' button
                 
         addNewTodo(textInput.value.trim()); 
         addListTile();
@@ -125,10 +121,11 @@ function addNewTask(){
         
     }); 
 
-    function addListTile() { 
-        // Track last added list, and the last input.
-        const lastAddedList = allTasks[allTasks.length - 1 ], 
-        providedTitle = textInput.value.trim();        
+    
+    function addListTile() {                    // Method toa add a list tile, once a list is added this way
+        
+        lastAddedList = allTasks[allTasks.length - 1 ], 
+        providedTitle = textInput.value.trim();                    
             if (lastAddedList.title === providedTitle ) { 
                 container.style.visibility = "visible"; 
                 container.innerHTML = `
@@ -144,8 +141,8 @@ function addNewTask(){
                 <div class = "other-details">
                 </div>`
 
-                // Add a click event to the tile created dynamically
-                    tile.addEventListener("click", addListDetails); 
+                
+                    tile.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
             }
         
             
@@ -153,7 +150,6 @@ function addNewTask(){
     }
 
 }
-
 
 
 // Add click events to the main area click items 
@@ -165,13 +161,11 @@ for (let i = 0; i < mainUtilities.length; i++) {
     })
 }
 
-// Track the most recent added list
-let lastAddedList; 
 
 //To view/Add list details
 function addListDetails() {
-    // Remove click event from the tile 
-    tile.removeEventListener("click", addListDetails); 
+     
+    tile.removeEventListener("click", addListDetails); // Remove click event from the tile 
 
     const ribbon2 = document.querySelector(".ribbon2");
     ribbon2.innerHTML = " ";
@@ -183,8 +177,7 @@ function addListDetails() {
                 </button> 
             </div>`
 
-    const ribbon = document.querySelector(".ribbon"), 
-    ribbon3 = document.querySelector(".ribbon3");
+    const ribbon = document.querySelector(".ribbon")
 
     const main = document.createElement("div"),
     leftMain = document.createElement("div"), 
@@ -220,7 +213,7 @@ function addListDetails() {
             <button type = "button"> 
                 <img src = "${calendarIcon}">
             </button>
-            <input type = "date" placeholder ="Add Due Date" class = "change">
+            <input type = "date" id = "dueDate" class = "change">
         </span>
     </div>
     <div class = "details">
@@ -256,17 +249,16 @@ function addListDetails() {
             </span>
         </footer>
     </div>
-    ` 
-
+    `
 
     mainArea.appendChild(main); 
 
     main.append(leftMain, rightMain); 
-    leftMain.append(ribbon, ribbon2, ribbon3); 
-
-    const textareaInputs = document.querySelectorAll("input[type = 'textarea']"); 
+    leftMain.append(ribbon, ribbon2, tile);
+    
 
     // Add keyboard event to save a details 
+    const textareaInputs = document.querySelectorAll("input[type = 'textarea']"); 
     for (let i = 0; i < textareaInputs.length; i++) {
         textareaInputs[i].addEventListener("keydown", function(event) {
             if (event.key === "Enter") {
@@ -287,7 +279,7 @@ function addListDetails() {
         })
     }
 
-    function updateList(listdetails) {
+    function updateList(listdetails) {   // Method to update the created list.  
 
         const otherDetails = document.querySelector(".other-details"), addedDetails 
         = document.createElement("p"); 
@@ -307,6 +299,10 @@ function addListDetails() {
                 details.value = details.ariaPlaceholder;    
                 addedDetails.textContent = lastAddedList[listdetails];       
                 break;
+                case "dueDate":
+                details.value = format(new Date(), "yyyy-MM-dd")
+                addedDetails.textContent = lastAddedList[listdetails]; 
+
             default:
                 break;
         }
@@ -319,7 +315,7 @@ function addListDetails() {
 
 
 
-// Function to checked the button click,and run listener 
+// Function to checked the button click,and run a listener 
 function checkItemClicked(buttonID){
     switch (buttonID) {
         case "s":
@@ -336,9 +332,7 @@ function checkItemClicked(buttonID){
     }
 }
 
-// The Main area Section
 // Sort icon
-
 function sort() {
     const sort = document.querySelector("#s"); 
     const card = document.createElement("div");
@@ -374,7 +368,6 @@ function group() {
 
 
 console.log(allTasks); 
-
 
 
 
