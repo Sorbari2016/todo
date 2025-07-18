@@ -7,9 +7,9 @@ import { format, compareAsc } from "date-fns";
 
 // Create a List
 
-
-class todo {
-    constructor(title, description, dueDate, note) { //Create a blueprint for the list objects
+//Create a blueprint for the list objects
+class Todo {
+    constructor(title, description, dueDate, note) {
      this.title = title; 
      this.description = description; 
      this.dueDate = format(new Date(dueDate), "MM/dd/yyyy"); 
@@ -17,7 +17,7 @@ class todo {
     }
 }
 
-class todoPriority extends todo {
+class TodoPriority extends Todo {
     constructor(title, description, dueDate, note, priority) {
         super(title, description, dueDate, note)
         this.priority = priority; 
@@ -42,7 +42,7 @@ class todoPriority extends todo {
 }
 
 
-class todoList extends todoPriority {
+class TodoList extends TodoPriority {
     constructor(title, description, dueDate, priority, note, checklist) {
         super(title, description, dueDate, note, priority);
 
@@ -73,7 +73,7 @@ const project = [];
 
 
 // Create a blueprint to create an empty folder
-class folder {
+class Folder {
     constructor(title) {
         this.title = title; 
         this.lists = []; 
@@ -81,7 +81,7 @@ class folder {
 }
 
 
-class newFolder extends folder{
+class NewFolder extends Folder{
     constructor(title) {
         super(title)
     }
@@ -97,7 +97,7 @@ const userProjects = [];
 
 // To add a new user defined folder
 function addNewFolder(title) {
-    const userFolder = new newFolder(title);  
+    const userFolder = new NewFolder(title);  
     userProjects.push(userFolder)
     return userFolder;
 }
@@ -108,7 +108,7 @@ const allTasks = [];
 // Create a function to help us create a new todo list, and add to the default directory, or user defined. 
 function addNewTodo(title, 
     description = " ", dueDate = format(new Date(), "MM/dd/yyyy"), priority = "medium", note = " ", checklist = "no", projectName = "project"){
-    const newTodo = new todoList(title, description, dueDate, priority, note, checklist)
+    const newTodo = new TodoList(title, description, dueDate, priority, note, checklist)
     allTasks.push(newTodo);  // Keep here, so that all can be tracked. 
     if (projectName !== "project") {
         
