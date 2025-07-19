@@ -292,6 +292,7 @@ function addListDetails() {
         const details = document.getElementById(listProperty)
         lastAddedList = allTasks[allTasks.length -1]; 
         lastAddedList[listProperty] = details.value; 
+        details.disabled = true; 
 
         
         addedDetails.textContent = lastAddedList[listProperty]; // Add updated details to tile
@@ -365,6 +366,6 @@ function group() {
 
 
 console.log(allTasks); 
-console.log(allTasks[allTasks.length - 1].listDetails().title); 
+console.log(allTasks[allTasks.length - 1].listDetails());
 
 

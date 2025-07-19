@@ -39,7 +39,7 @@ class TodoList extends Todo {
 
     listDetails() {
         return `${this.title}, ${this.description}, ${this.duedate}, 
-        ${this.note}, ${this.priorityLevel()}, ${this.checkOptions()}`; 
+        ${this.note}, ${this.priority}, ${this.checkOptions()}`; 
     }
 }
 

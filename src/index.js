@@ -6,6 +6,8 @@ import './module.js';
 
 import './script.js'; 
 
+import './javaScript.js'; 
+
 
 
 
