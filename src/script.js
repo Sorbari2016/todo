@@ -366,6 +366,5 @@ function group() {
 
 
 console.log(allTasks); 
-console.log(allTasks[allTasks.length - 1].listDetails());
 
 

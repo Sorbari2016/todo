@@ -93,6 +93,13 @@ input {
    gap: 20px;
 }
 
+.sidebar button {
+   width: 90%; 
+   background-color: grey;
+   border: 0; 
+}
+
+
 /* Rule for the sibe bar items */
 .item {
    display: flex;
