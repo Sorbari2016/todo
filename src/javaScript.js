@@ -1,8 +1,17 @@
 // SIDEBAR DOM STUFF
 
-document.querySelector(".upper_section").addEventListener("click", function(event) {
-    if (event.target.tagName === "DIV") {
-        const divClass = event.target.getAttribute("class")
-        console.log(divClass + " " + "was clicked"); 
+// IMPORTS 
+import { checkItemClicked } from "./script";
+
+// Add Event delegation on the sidebar top section
+const sideBarTop = document.querySelector(".upper_section"); 
+
+sideBarTop.addEventListener("click", function(event) {
+    if (event.target.tagName === "BUTTON") {
+        buttonID = event.target.getAttribute("id")
+
+        checkItemClicked(buttonID); 
     }
 });
+
+

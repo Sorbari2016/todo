@@ -97,6 +97,7 @@ input {
    width: 90%; 
    background-color: grey;
    border: 0; 
+   cursor: pointer;
 }
 
 

@@ -367,4 +367,6 @@ function group() {
 
 console.log(allTasks); 
 
+export {checkItemClicked}; 
+
 
