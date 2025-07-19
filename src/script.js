@@ -15,6 +15,7 @@ import { addNewTodo,addNewFolder } from "./module.js";
 import { format, compareAsc, add, differenceInCalendarDays } from "date-fns";
 import { clearMainArea,mainArea, sortIcon} from "./module2";
 import { constructFromSymbol } from "date-fns/constants";
+import { addButtonTask } from "./javaScript.js";
 
 
 // The search, & first text inputs. 
@@ -324,6 +325,9 @@ function checkItemClicked(buttonID){
             break; 
         case "search":
             search(); 
+        break; 
+        case "tasks": 
+            addButtonTask(); 
         break;  
         default:
         break;
@@ -367,6 +371,6 @@ function group() {
 
 console.log(allTasks); 
 
-export {checkItemClicked}; 
+export {checkItemClicked, priorityIcon};  
 
 
