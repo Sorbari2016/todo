@@ -82,9 +82,8 @@ function addNewFolder(title) {
 const allTasks = [];  
 
 // Create a function to help us create a new todo list, and add to the default directory, or user defined. 
-function addNewTodo(title, 
-    description = " ", dueDate = format(new Date(), "MM/dd/yyyy"), priority = "medium", note = " ", checklist = "no", projectName = "project"){
-    const newTodo = new TodoList(title, description, dueDate, priority, note, checklist)
+function addNewTodo(title, description = " ", dueDate = format(new Date(), "MM/dd/yyyy"), note = " ", priority = "medium",  checklist = "no", projectName = "project"){
+    const newTodo = new TodoList(title, description, dueDate, note, priority, checklist)
     allTasks.push(newTodo);  // Keep here, so that all can be tracked. 
     if (projectName !== "project") {
         
@@ -111,10 +110,9 @@ function addNewTodo(title,
 }
 
 
-
 const firstFolder = addNewFolder("Music"); 
-const firstList = addNewTodo("Sing", 'Start a singing rehearsal', "06/03/2025","high"," i need to be good", 'yes', "Music");
-const secondList = addNewTodo("Fuck"); 
+const firstList = addNewTodo("Sing", 'Start a singing rehearsal', "06/03/2025"," i need to be good", "high", 'yes', "Music");
+const secondList = addNewTodo("Invent"); 
 export default allTasks; 
 export {addNewFolder, addNewTodo}; 
 

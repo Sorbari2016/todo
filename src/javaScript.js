@@ -93,25 +93,4 @@ function addButtonTask() {
 
 }
 
-// addTaskButtons.forEach((button) => {
-//   button.addEventListener("click", function() {
-//     const buttonID = this.getAttribute("id");
-
-//     if (buttonID === "cancel") {
-//       clearMainArea();
-//       reLoadMainArea();
-//     } else {
-//       const newListTitle = document.getElementById("title").value;
-//       const newListDescription = document.getElementById("description").value;
-//       const newListDueDate = document.getElementById("dueDate").value;
-//       const newListPriorityLevel = document.getElementById("priority").value;
-//       const newListNotes = document.getElementById("notes").value;
-//       const newListCheck = document.querySelector("input[type='checkbox']").checked;
-
-//       addNewTodo(newListTitle, newListDescription, newListDueDate, newListPriorityLevel, newListNotes);
-//     }
-//   });
-// });
-
-
 export {addButtonTask}
