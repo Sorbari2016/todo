@@ -10,6 +10,7 @@ import { format, compareAsc } from "date-fns";
 //Create a blueprint for the list objects
 class Todo {
     constructor(title, description, dueDate, note, priority) {
+     this.createdDate = format(new Date(), "MM/dd/yyyy"); // store the date the list was created
      this.title = title; 
      this.description = description; 
      this.dueDate = format(new Date(dueDate), "MM/dd/yyyy"); 

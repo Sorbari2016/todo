@@ -369,7 +369,7 @@ function group() {
 
 console.log(allTasks); 
 
-export {checkItemClicked, priorityIcon,mainAreaClicks, addNewTask} 
+export {checkItemClicked, priorityIcon,textInput, lastAddedList, providedTitle, mainAreaClicks, addNewTask} 
 
 
 

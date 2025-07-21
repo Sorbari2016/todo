@@ -8,7 +8,7 @@ import calendarIcon from "./images/calendar.png";
 import bellIcon from "./images/bell.png"; 
 import repeatIcon from "./images/repeat.png"; 
 import { format, compareAsc } from "date-fns";
-import {mainAreaClicks, addNewTask} from "./script";
+import {mainAreaClicks, addNewTask,textInput, providedTitle, lastAddedList} from "./script";
 import allTasks from './module';
 
 
@@ -61,7 +61,7 @@ function reLoadMainArea() {
                     <div class="top sdy_pad">
                         <span>
                             <input type="checkbox">
-                            <input type="text"placeholder="Add a task">
+                            <input type ="text" placeholder="Add a task">
                         </span>
                     </div>
                     <hr/>
@@ -79,9 +79,6 @@ function reLoadMainArea() {
     const mainContentArea = document.getElementById("main_content_area");
     mainContentArea.appendChild(mainArea);
 
-    const textInput = document.querySelector("input[type = 'text']"); 
-    let providedTitle, lastAddedList; 
-    textInput.addEventListener("input", addNewTask); 
     mainAreaClicks(); 
     addNewTask(); 
 }
