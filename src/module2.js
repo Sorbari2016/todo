@@ -8,7 +8,9 @@ import calendarIcon from "./images/calendar.png";
 import bellIcon from "./images/bell.png"; 
 import repeatIcon from "./images/repeat.png"; 
 import { format, compareAsc } from "date-fns";
-import {mainAreaClicks, addNewTask, textInput, lastAddedList, providedTitle} from "./script";
+import {mainAreaClicks, addNewTask} from "./script";
+import allTasks from './module';
+
 
 
 
@@ -76,6 +78,10 @@ function reLoadMainArea() {
     mainArea.classList.add("main_area"); 
     const mainContentArea = document.getElementById("main_content_area");
     mainContentArea.appendChild(mainArea);
+
+    const textInput = document.querySelector("input[type = 'text']"); 
+    let providedTitle, lastAddedList; 
+    textInput.addEventListener("input", addNewTask); 
     mainAreaClicks(); 
     addNewTask(); 
 }

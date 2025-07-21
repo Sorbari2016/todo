@@ -14,27 +14,23 @@ import deleteIcon from "./images/trash.png";
 import { addNewTodo,addNewFolder } from "./module.js";
 import { format, compareAsc, add, differenceInCalendarDays } from "date-fns";
 import { clearMainArea,mainArea, sortIcon} from "./module2";
-import { constructFromSymbol } from "date-fns/constants";
 import { addButtonTask } from "./javaScript.js";
 
 
 // The search, & first text inputs. 
 
-// Add input events to the search and text inputs
+// Add input events to the search input
 const searchInput = document.querySelector("input[type = 'search']"), 
 textInput = document.querySelector("input[type = 'text']"); 
 
-const mainInputs = [searchInput, textInput]; 
  
-for (let i = 0; i < mainInputs.length; i++ ) {
-    mainInputs[i].addEventListener("input", function() {
+   searchInput.addEventListener("input", function() {
 
         const inputClicked = this.getAttribute("type"); 
 
         checkItemClicked(inputClicked); 
     });        
     
-}
  
 // Method to run the search. 
 function search() { 
@@ -373,6 +369,7 @@ function group() {
 
 console.log(allTasks); 
 
-export {checkItemClicked, priorityIcon,mainAreaClicks, addNewTask, textInput, lastAddedList, providedTitle};   
+export {checkItemClicked, priorityIcon,mainAreaClicks, addNewTask} 
+
 
 
