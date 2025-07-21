@@ -42,30 +42,34 @@ function reLoadMainArea() {
                     </div>
                     <div class="right_icons">
                         <div class="rib_icon item">
-                            <img src="${sortIcon}" alt="sort icon">
-                            <p id = "sort">Sort</p>
+                            <button id = "s" class="btn click"> 
+                                <img src="${sortIcon}" alt="sort icon">
+                                <p id = "sort">Sort</p>
+                            </button>
                         </div>
                         <div class="rib_icon item">
-                            <img src="${folderIcon}" alt="group icon">
-                            <p>Group</p>
+                            <button id = "g" class = "btn click">
+                                <img src="${folderIcon}" alt="group icon">
+                                <p>Group</p>
+                            </button>
                         </div>
                     </div>
                 </div>
                 <div class="ribbon ribbon2 pry_mgn">
                     <div class="top sdy_pad">
                         <span>
-                            <input type="radio">
+                            <input type="checkbox">
                             <input type="text"placeholder="Add a task">
                         </span>
                     </div>
                     <hr/>
                     <div class="bottom">
                         <div class="task_icons sdy_pad item">
-                            <img src="${calendarIcon}" alt="calendar">
-                            <img src="${bellIcon}" alt="notification icon">
-                            <img src="${repeatIcon}" alt="repeat icon">
+                            <img id = "c" class = "click" src="${calendarIcon}" alt="calendar">
+                            <img id = "rm" class = "click" src="${bellIcon}" alt="notification icon">
+                            <img id = "r" class = "click" src="${repeatIcon}" alt="repeat icon">
                         </div>
-                        <button type="submit">Add</button>
+                        <button type="submit" id = "addBtn">Add</button>
                     </div>
                 </div>
             </div>`

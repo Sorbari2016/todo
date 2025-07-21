@@ -2,7 +2,8 @@
 
 // IMPORTS 
 import { checkItemClicked, priorityIcon } from "./script";
-import { clearMainArea, mainArea, } from "./module2";
+import { clearMainArea, mainArea, reLoadMainArea} from "./module2";
+import { addNewTodo } from "./module";
 import allTasks from "./module";
 
 // Add Event delegation on the sidebar top section
@@ -11,39 +12,38 @@ const sideBarTop = document.querySelector(".upper_section");
 sideBarTop.addEventListener("click", function(event) {
     if (event.target.tagName === "BUTTON") {
         const buttonID = event.target.getAttribute("id")
-        console.log(buttonID); 
 
         checkItemClicked(buttonID); 
     }
 });
 
-// Add Button Method 
+// Create Sidebar 'Add Task' Button Method 
 function addButtonTask() {
     clearMainArea();
     const list = document.createElement("div"); 
     list.classList.add("list"); 
 
     list.innerHTML = 
-    `<form action="" method="get" id = "list-form">
+    `<form id = "list-form">
         <div class = "details"> 
             <span>
                 <input type = "checkbox">
-                <input type = "text" placeholder = "Read for 3 hours">
+                <input type = "text" id = "title" placeholder = "Read for 3 hours">
             </span>    
         </div>
         <div class = "details">    
-            <input type = "textarea" placeholder = "Description">
+            <input type = "textarea" id = "description" placeholder = "Description">
         </div>
         <div class = "details">
-            <input type = "date">
+            <input type = "date" id = "dueDate">
         </div>
         <div class = "details">
-            <input type = "textarea" placeholder = "Note">
+            <input type = "textarea" id = "notes" placeholder = "Note">
         </div>
         <div class = "details">
             <span>
                 <img src = '${priorityIcon}'>
-                <select>
+                <select id = "priority">
                     <option>    
                         Priority
                     </option>
@@ -55,19 +55,63 @@ function addButtonTask() {
         </div>
         <div class = "details"> 
             <span>
-                <button type = "submit">
+                <button type = "button" id = "cancel">
                 Cancel
                 </button>
-                <button type = "submit">
+                <button type = "button" id = "addTask">
                 Add Task
                 </button>
             </span> 
         </div> 
-    
     </form>`
+    mainArea.appendChild(list);
+    
+    //Add a click events to the cancel, & Add Task buttons
+    const addTaskButtons = document.querySelectorAll("button[type = 'button']");
 
-mainArea.appendChild(list); 
+    addTaskButtons.forEach((button) => {    
+        button.addEventListener("click", function() {
+        const buttonID = this.getAttribute("id");
+  
+        if (buttonID === "cancel") {
+            clearMainArea();
+            reLoadMainArea();
+        } else {
+            const newListTitle = document.getElementById("title").value;
+            const newListDescription = document.getElementById("description").value;
+            const newListDueDate = document.getElementById("dueDate").value;
+            const newListPriorityLevel = document.getElementById("priority").value;
+            const newListNotes = document.getElementById("notes").value;
+            const newListCheck = document.querySelector("input[type='checkbox']").checked;
+  
+            addNewTodo(newListTitle,newListDescription, new Date(newListDueDate), newListPriorityLevel, newListNotes, newListCheck);
+            clearMainArea(); 
+            reLoadMainArea(); 
+        }
+    });
+  }); 
+
 }
+
+// addTaskButtons.forEach((button) => {
+//   button.addEventListener("click", function() {
+//     const buttonID = this.getAttribute("id");
+
+//     if (buttonID === "cancel") {
+//       clearMainArea();
+//       reLoadMainArea();
+//     } else {
+//       const newListTitle = document.getElementById("title").value;
+//       const newListDescription = document.getElementById("description").value;
+//       const newListDueDate = document.getElementById("dueDate").value;
+//       const newListPriorityLevel = document.getElementById("priority").value;
+//       const newListNotes = document.getElementById("notes").value;
+//       const newListCheck = document.querySelector("input[type='checkbox']").checked;
+
+//       addNewTodo(newListTitle, newListDescription, newListDueDate, newListPriorityLevel, newListNotes);
+//     }
+//   });
+// });
 
 
 export {addButtonTask}
