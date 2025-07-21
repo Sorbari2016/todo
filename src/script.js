@@ -244,7 +244,6 @@ function addListDetails() {
         <footer>
             <span>
                 <div class = "date_created">
-                    <p></p>
                 </div>
                 <button type = "button">
                     <img src = "${deleteIcon}">
@@ -258,7 +257,12 @@ function addListDetails() {
 
     main.append(leftMain, rightMain); 
     leftMain.append(ribbon, ribbon2, tile);
-    
+
+    // Add Date created
+    const dateCreated = document.querySelector(".date_created"); 
+    dateCreated.innerHTML = 
+        `<p>${lastAddedList.createdDate}</p>`
+
 
     // Add keyboard event to save a details 
     const textareaInputs = document.querySelectorAll("input[type = 'textarea']"); 
