@@ -80,13 +80,29 @@ function addButtonTask() {
             const newListTitle = document.getElementById("title").value;
             const newListDescription = document.getElementById("description").value;
             const newListDueDate = document.getElementById("dueDate").value;
-            const newListPriorityLevel = document.getElementById("priority").value;
+            const newListPriority = document.getElementById("priority"); 
             const newListNotes = document.getElementById("notes").value;
             const newListCheck = document.querySelector("input[type='checkbox']").checked;
+            
+            let newListPriorityLevel = newListPriority.value; 
 
-            addNewTodo(newListTitle,newListDescription, new Date(newListDueDate), newListNotes,newListPriorityLevel, newListCheck);
-            clearMainArea();
-            reLoadMainArea();
+            if (newListTitle !== "") {
+                if (newListPriorityLevel === "Priority") {
+                    newListPriorityLevel = "medium"; 
+                    addNewTodo(newListTitle,newListDescription, new Date(newListDueDate), newListNotes,newListPriorityLevel, newListCheck);
+                    alert("Your List has been created ! ")
+                    clearMainArea();
+                    reLoadMainArea();
+                } else {
+                    newListPriorityLevel = newListPriority.value;
+                    addNewTodo(newListTitle, newListDescription, new Date(newListDueDate), newListNotes, newListPriorityLevel, newListCheck)
+                    alert("Your List has been created ! "); 
+                    clearMainArea();
+                    reLoadMainArea();
+                }
+            } else {
+                alert("Your list MUST have a title"); 
+            }
         }
     });
   }); 
@@ -94,3 +110,7 @@ function addButtonTask() {
 }
 
 export {addButtonTask}
+
+
+
+
