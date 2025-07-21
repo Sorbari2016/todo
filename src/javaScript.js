@@ -83,10 +83,10 @@ function addButtonTask() {
             const newListPriorityLevel = document.getElementById("priority").value;
             const newListNotes = document.getElementById("notes").value;
             const newListCheck = document.querySelector("input[type='checkbox']").checked;
-  
-            addNewTodo(newListTitle,newListDescription, new Date(newListDueDate), newListPriorityLevel, newListNotes, newListCheck);
-            clearMainArea(); 
-            reLoadMainArea(); 
+
+            addNewTodo(newListTitle,newListDescription, new Date(newListDueDate), newListNotes,newListPriorityLevel, newListCheck);
+            clearMainArea();
+            reLoadMainArea();
         }
     });
   }); 
