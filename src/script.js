@@ -145,21 +145,23 @@ function addNewTask(){
                 
                     tile.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
             }
-        
             
-        
     }
 
 }
 
 
-// Add click events to the main area click items 
-const mainUtilities = document.querySelectorAll(".click"); 
-for (let i = 0; i < mainUtilities.length; i++) {
-    mainUtilities[i].addEventListener("click", function() {
-        const itemClicked = this.getAttribute("id"); 
-        checkItemClicked(itemClicked); 
-    })
+// Add click events to the main area click items
+mainAreaClicks(); 
+
+function mainAreaClicks() {
+    const mainUtilities = document.querySelectorAll(".click"); 
+    for (let i = 0; i < mainUtilities.length; i++) {
+        mainUtilities[i].addEventListener("click", function() {
+            const itemClicked = this.getAttribute("id"); 
+            checkItemClicked(itemClicked); 
+        })
+    }
 }
 
 
@@ -371,6 +373,6 @@ function group() {
 
 console.log(allTasks); 
 
-export {checkItemClicked, priorityIcon};  
+export {checkItemClicked, priorityIcon,mainAreaClicks, addNewTask, textInput, lastAddedList, providedTitle};   
 
 

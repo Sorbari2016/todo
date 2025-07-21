@@ -8,6 +8,7 @@ import calendarIcon from "./images/calendar.png";
 import bellIcon from "./images/bell.png"; 
 import repeatIcon from "./images/repeat.png"; 
 import { format, compareAsc } from "date-fns";
+import {mainAreaClicks, addNewTask, textInput, lastAddedList, providedTitle} from "./script";
 
 
 
@@ -31,7 +32,6 @@ function clearMainArea() {
 
 function reLoadMainArea() {
     mainArea.innerHTML = `
-        <div class="main_area">
                 <div class="ribbon ribbon1 pry_mgn sdy_pad">
                     <div class="today item">
                         <img src="${sunnyIcon}" alt="sunny day icon">
@@ -73,9 +73,11 @@ function reLoadMainArea() {
                     </div>
                 </div>
             </div>`
-    
+    mainArea.classList.add("main_area"); 
     const mainContentArea = document.getElementById("main_content_area");
-     mainContentArea.appendChild(mainArea);
+    mainContentArea.appendChild(mainArea);
+    mainAreaClicks(); 
+    addNewTask(); 
 }
 
 // Export the functions
