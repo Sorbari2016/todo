@@ -76,21 +76,19 @@ function search() {
 
 
 // Create and select a third ribbon, append to main area.
-const container = document.createElement("div"); 
-                Object.assign(container, {
+const tile = document.createElement("div"); 
+                Object.assign(tile, {
                     className:"ribbon ribbon3 pry_mgn pry_pad"
                 })
-mainArea.appendChild(container); 
-container.style.visibility = "hidden"; 
-
-
-const tile = document.querySelector(".ribbon3"); 
-
+mainArea.appendChild(tile); 
+tile.style.visibility = "hidden"; 
 
 addNewTask(); // Run add new list method
 
 // Track last added list, and the last input.
-let lastAddedList, providedTitle; 
+let lastAddedList, providedTitle;
+let expand;  
+
 
 // Method to add new list to main area
 function addNewTask(){
@@ -119,18 +117,19 @@ function addNewTask(){
     }); 
 
     
+    
     function addListTile() {                    // Method toa add a list tile, once a list is added this way
         
         lastAddedList = allTasks[allTasks.length - 1 ], 
         providedTitle = textInput.value.trim();                    
             if (lastAddedList.title === providedTitle ) { 
-                container.style.visibility = "visible"; 
-                container.innerHTML = `
-                    <div class = "list-title">
-                        <div class = "title item">
-                            <input type = "checkbox"> 
+                tile.style.visibility = "visible"; 
+                tile.innerHTML = `
+                    <div class = "title-area">
+                        <input type = "checkbox" id = "checklist">
+                        <div class = "expand">
                             <p>${lastAddedList.title}</p>
-                        </div>
+                        </div>        
                         <button type = "button">
                             <img src = '${importantIcon}'>
                         </button>
@@ -138,8 +137,8 @@ function addNewTask(){
                     <div class = "other-details">
                     </div>`
 
-                
-                    tile.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
+                    expand = document.querySelector(".expand");  
+                    expand.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
             }
             
     }
@@ -155,7 +154,7 @@ function mainAreaClicks() {
     for (let i = 0; i < mainUtilities.length; i++) {
         mainUtilities[i].addEventListener("click", function(e) {
             const itemClicked = this.getAttribute("id"); 
-            if (itemClicked === "checkbox1") {
+            if (itemClicked === "checkbox") {
                 e.preventDefault(); 
             } else {
             checkItemClicked(itemClicked); 
@@ -167,10 +166,9 @@ function mainAreaClicks() {
 
 //To view/Add list details
 function addListDetails() {
-     
-    tile.removeEventListener("click", addListDetails); // Remove click event from the tile 
+    expand.removeEventListener("click", addListDetails); // Remove click event from the tile 
     tile.style.height   = "10rem"; 
-    const titleheading = document.querySelector(".list-title p"); 
+    const titleheading = document.querySelector(".title-area p"); 
     titleheading.style.fontWeight = "bold"; 
 
     const ribbon2 = document.querySelector(".ribbon2");

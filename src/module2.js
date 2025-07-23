@@ -60,7 +60,7 @@ function reLoadMainArea() {
                 <div class="ribbon ribbon2 pry_mgn">
                     <div class="top sdy_pad">
                         <span>
-                            <input type="checkbox" class ="click" id = "checkbox1">
+                            <input type="checkbox" class ="click" id = "checkbox">
                             <input type ="text" placeholder="Add a task">
                         </span>
                     </div>

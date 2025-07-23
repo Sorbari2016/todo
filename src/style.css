@@ -249,14 +249,23 @@ h4 {
    grid-template-columns: 2fr 1fr;
 }
 
-.list-title {
+.title-area {
    display: grid;
-   grid-template-columns:  1fr 1fr;
-   gap: 5rem;
+   grid-template-columns: 0.25fr 4fr 0.5fr; 
+   gap: 1rem;
+   align-items: center;
+}
+
+.title-area p {
+   justify-self:flex-start; 
+}
+
+.title-area input {
+   justify-self: flex-end;
 }
 
 
-.list-title button {
+.title-area button {
    justify-self: flex-end; 
    padding-right: 1rem;
 }
