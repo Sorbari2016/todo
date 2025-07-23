@@ -10,15 +10,18 @@ import { format, compareAsc } from "date-fns";
 //Create a blueprint for the list objects
 class Todo {
     constructor(title, description, dueDate, note, priority) {
-     this.createdDate = format(new Date(), "MM/dd/yyyy"); // store the date the list was created
+     this.dateCreated = format(new Date(), "MM/dd/yyyy");  // store the date the list was created
      this.title = title; 
      this.description = description; 
      this.dueDate = format(new Date(dueDate), "MM/dd/yyyy"); 
      this.note = note; 
-     this.priority = priority; 
+     this.priority = priority;
+
     }
 }
 
+// Arrays to track completed and incomplet tasks 
+const conpletedTasks = [], uncompletedTasks = []; 
 
 class TodoList extends Todo {
     constructor(title, description, dueDate, note, priority, checklist) {
@@ -30,10 +33,10 @@ class TodoList extends Todo {
     checkOptions() {
         let options; 
     
-        if (this.checklist === "yes") {
-            options = "Done"; 
+        if (this.checklist === false ) {
+            options = "Not completed"; 
         } else {
-            options = "Not Done";
+            options = "Completed"; 
         }
         return options; 
     }
@@ -46,8 +49,6 @@ class TodoList extends Todo {
 
 // Create default directory for the different todos
 const project = []; 
-
-
 
 // Create a blueprint to create an empty folder
 class Folder {
@@ -83,7 +84,7 @@ function addNewFolder(title) {
 const allTasks = [];  
 
 // Create a function to help us create a new todo list, and add to the default directory, or user defined. 
-function addNewTodo(title, description = " ", dueDate = format(new Date(), "MM/dd/yyyy"), note = " ", priority = "medium",  checklist = "no", projectName = "project"){
+function addNewTodo(title, description = " ", dueDate = format(new Date(), "MM/dd/yyyy"), note = " ", priority = "medium",  checklist = false, projectName = "project"){
     const newTodo = new TodoList(title, description, dueDate, note, priority, checklist)
     allTasks.push(newTodo);  // Keep here, so that all can be tracked. 
     if (projectName !== "project") {
@@ -112,9 +113,13 @@ function addNewTodo(title, description = " ", dueDate = format(new Date(), "MM/d
 
 
 const firstFolder = addNewFolder("Music"); 
-const firstList = addNewTodo("Sing", 'Start a singing rehearsal', "06/03/2025"," i need to be good", "high", 'yes', "Music");
-const secondList = addNewTodo("Invent"); 
+
+const firstTask = addNewTodo("Finish Web Dev", "Before the end of the year", "07/07/2025", "I will be really happy", "medium", false); 
+const secondTask = addNewTodo("Marry"); 
+console.log(allTasks); 
+
 export default allTasks; 
 export {addNewFolder, addNewTodo}; 
+ 
 
 

@@ -261,7 +261,7 @@ function addListDetails() {
     // Add Date created
     const dateCreated = document.querySelector(".date_created"); 
     dateCreated.innerHTML = 
-        `<p>${lastAddedList.createdDate}</p>`
+        `<p>${lastAddedList.dateCreated}</p>`
 
 
     // Add keyboard event to save a details 
@@ -369,9 +369,6 @@ function group() {
     `
     group.appendChild(card); 
 }
-
-
-console.log(allTasks); 
 
 export {checkItemClicked, priorityIcon,textInput, lastAddedList, providedTitle, mainAreaClicks, addNewTask} 
 
