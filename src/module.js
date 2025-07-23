@@ -21,7 +21,7 @@ class Todo {
 }
 
 // Arrays to track completed and incomplet tasks 
-const conpletedTasks = [], uncompletedTasks = []; 
+const completedTasks = [], uncompletedTasks = []; 
 
 class TodoList extends Todo {
     constructor(title, description, dueDate, note, priority, checklist) {
@@ -42,7 +42,7 @@ class TodoList extends Todo {
     }
 
     listDetails() {
-        return `${this.title}, ${this.description}, ${this.duedate}, 
+        return `${this.dateCreated}, ${this.title}, ${this.description}, ${this.duedate}, 
         ${this.note}, ${this.priority}, ${this.checkOptions()}`; 
     }
 }
@@ -86,7 +86,14 @@ const allTasks = [];
 // Create a function to help us create a new todo list, and add to the default directory, or user defined. 
 function addNewTodo(title, description = " ", dueDate = format(new Date(), "MM/dd/yyyy"), note = " ", priority = "medium",  checklist = false, projectName = "project"){
     const newTodo = new TodoList(title, description, dueDate, note, priority, checklist)
-    allTasks.push(newTodo);  // Keep here, so that all can be tracked. 
+    allTasks.push(newTodo);  // Keep here, so that all can be tracked.
+
+    if (newTodo.checklist === true) {  // Check if the checklist is false or true, & place in app array. 
+        completedTasks.push(newTodo); 
+    } else {
+        uncompletedTasks.push(newTodo);
+    }
+
     if (projectName !== "project") {
         
         let targetFolder; 
@@ -116,7 +123,9 @@ const firstFolder = addNewFolder("Music");
 
 const firstTask = addNewTodo("Finish Web Dev", "Before the end of the year", "07/07/2025", "I will be really happy", "medium", false); 
 const secondTask = addNewTodo("Marry"); 
-console.log(allTasks); 
+console.log(allTasks);
+
+console.log(completedTasks, uncompletedTasks); 
 
 export default allTasks; 
 export {addNewFolder, addNewTodo}; 
