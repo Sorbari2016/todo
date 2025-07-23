@@ -153,9 +153,13 @@ mainAreaClicks();
 function mainAreaClicks() {
     const mainUtilities = document.querySelectorAll(".click"); 
     for (let i = 0; i < mainUtilities.length; i++) {
-        mainUtilities[i].addEventListener("click", function() {
+        mainUtilities[i].addEventListener("click", function(e) {
             const itemClicked = this.getAttribute("id"); 
+            if (itemClicked === "checkbox1") {
+                e.preventDefault(); 
+            } else {
             checkItemClicked(itemClicked); 
+            }
         })
     }
 }
