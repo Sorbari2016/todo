@@ -84,68 +84,61 @@ mainArea.appendChild(tile);
 tile.style.visibility = "hidden"; 
 
 
-
 // Track last added list, and the last input.
 let lastAddedList, providedTitle;
 let expand;  
 
 
 // Method toa add a list tile, once a list is added this way
-function listTile() {                    
-        
-    lastAddedList = allTasks[allTasks.length - 1 ], 
-    providedTitle = textInput.value.trim();                    
-        if (lastAddedList.title === providedTitle ) { 
-            tile.style.visibility = "visible"; 
-            tile.innerHTML = `
-                <div class = "title-area">
-                    <input type = "checkbox" id = "checklist" class = "change">
-                    <div class = "expand">
-                        <p>${lastAddedList.title}</p>
-                    </div>        
-                    <button type = "button">
-                        <img src = '${importantIcon}'>
-                    </button>
-                </div>
-                <div class = "other-details">
-                </div>`
+function listTile(list) {                    
+    tile.style.visibility = "visible"; 
+    tile.innerHTML = `
+        <div class = "title-area">
+            <input type = "checkbox" id = "checklist" class = "change">
+            <div class = "expand">
+                <p>${list.title}</p>
+            </div>        
+            <button type = "button">
+                <img src = '${importantIcon}'>
+            </button>
+        </div>
+        <div class = "other-details">
+        </div>`  
 
-            expand = document.querySelector(".expand");  
-            expand.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
-        }
-        
+     expand = document.querySelector(".expand");  
+    expand.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
 }
 
-addNewTask(); // Run add new list method
+addNewTask(); 
 
 // Method to add new list to main area
 function addNewTask(){
     document.addEventListener("keydown", function(event) {  // Add keydown event,listen for Enter
 
         if (event.key === 'Enter') {
-            if (textInput.value.length > 1 ) { 
-                            
-                addNewTodo(textInput.value.trim());  
-                listTile(); 
-        
-                textInput.value = " "; 
-                
-            }        
+            createTask();                
         }
     })
     
     const addBtn = document.getElementById("addBtn")
     addBtn.addEventListener("click", function(event){ //Add click event, listen to click on 'Add' button
-                
-        addNewTodo(textInput.value.trim()); 
-        listTile();
-        
-        textInput.value = " "; 
-        
+        createTask(); 
     }); 
 
-    listTile(); 
+}
 
+
+function createTask() {
+    if (textInput.value.length > 1 ) { 
+                
+        addNewTodo(textInput.value.trim());
+        
+        lastAddedList = allTasks[allTasks.length - 1 ]
+        listTile(lastAddedList); 
+
+        textInput.value = " "; 
+        
+    }
 }
 
 
