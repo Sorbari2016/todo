@@ -83,12 +83,40 @@ const tile = document.createElement("div");
 mainArea.appendChild(tile); 
 tile.style.visibility = "hidden"; 
 
-addNewTask(); // Run add new list method
+
 
 // Track last added list, and the last input.
 let lastAddedList, providedTitle;
 let expand;  
 
+
+// Method toa add a list tile, once a list is added this way
+function listTile() {                    
+        
+    lastAddedList = allTasks[allTasks.length - 1 ], 
+    providedTitle = textInput.value.trim();                    
+        if (lastAddedList.title === providedTitle ) { 
+            tile.style.visibility = "visible"; 
+            tile.innerHTML = `
+                <div class = "title-area">
+                    <input type = "checkbox" id = "checklist" class = "change">
+                    <div class = "expand">
+                        <p>${lastAddedList.title}</p>
+                    </div>        
+                    <button type = "button">
+                        <img src = '${importantIcon}'>
+                    </button>
+                </div>
+                <div class = "other-details">
+                </div>`
+
+            expand = document.querySelector(".expand");  
+            expand.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
+        }
+        
+}
+
+addNewTask(); // Run add new list method
 
 // Method to add new list to main area
 function addNewTask(){
@@ -98,7 +126,7 @@ function addNewTask(){
             if (textInput.value.length > 1 ) { 
                             
                 addNewTodo(textInput.value.trim());  
-                addListTile(); 
+                listTile(); 
         
                 textInput.value = " "; 
                 
@@ -110,40 +138,16 @@ function addNewTask(){
     addBtn.addEventListener("click", function(event){ //Add click event, listen to click on 'Add' button
                 
         addNewTodo(textInput.value.trim()); 
-        addListTile();
+        listTile();
         
         textInput.value = " "; 
         
     }); 
 
-    
-    
-    function addListTile() {                    // Method toa add a list tile, once a list is added this way
-        
-        lastAddedList = allTasks[allTasks.length - 1 ], 
-        providedTitle = textInput.value.trim();                    
-            if (lastAddedList.title === providedTitle ) { 
-                tile.style.visibility = "visible"; 
-                tile.innerHTML = `
-                    <div class = "title-area">
-                        <input type = "checkbox" id = "checklist">
-                        <div class = "expand">
-                            <p>${lastAddedList.title}</p>
-                        </div>        
-                        <button type = "button">
-                            <img src = '${importantIcon}'>
-                        </button>
-                    </div>
-                    <div class = "other-details">
-                    </div>`
-
-                    expand = document.querySelector(".expand");  
-                    expand.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
-            }
-            
-    }
+    listTile(); 
 
 }
+
 
 
 // Add click events to the main area click items
@@ -198,7 +202,7 @@ function addListDetails() {
     `<div id = "list_header" class = "details">
         <span>
             <button type = "type">
-                <input type = "checkbox" id = "checklist" class = "change">
+                <input type = "checkbox" id = "checklist2" class = "change">
             </button>
             <h4>${lastAddedList.title}</h4>
             <img src = "${importantIcon}">
@@ -282,35 +286,40 @@ function addListDetails() {
     const changeElements = document.querySelectorAll(".change"); 
     for (let i = 0; i < changeElements.length; i++) {
         changeElements[i].addEventListener("change", function(){
-            const detailField = this.getAttribute("id"); 
+        const detailField = this.getAttribute("id"); 
 
-            updateList(detailField); 
-        })
-    }
+        updateList(detailField); 
+    })
+  }
+
+}
+
+
 
 // Method to update the created list. 
-    function updateList(listProperty) {    
-        const otherDetails = document.querySelector(".other-details"), 
-        addedDetails  = document.createElement("p"); 
-        otherDetails.append(addedDetails); 
+function updateList(listProperty) {    
+    const otherDetails = document.querySelector(".other-details"), 
+    addedDetails  = document.createElement("p"); 
+    otherDetails.append(addedDetails); 
 
-        const details = document.getElementById(listProperty)
+    const details = document.getElementById(listProperty)
+    if (listProperty === "checklist") {
+        lastAddedList[listProperty] = details.checked; 
+    } else {
         lastAddedList = allTasks[allTasks.length -1]; 
-        lastAddedList[listProperty] = details.value; 
-        details.disabled = true; 
+        lastAddedList[listProperty] = details.value;
+    } 
+    details.disabled = true; 
 
+    
+    addedDetails.textContent = lastAddedList[listProperty]; // Add updated details to tile
+   
+    if (listProperty === "dueDate") {                     // Reset the inputs
+        details.value = format(new Date(), "yyyy-MM-dd")
+    } else if (listProperty === "priority") {
         
-        addedDetails.textContent = lastAddedList[listProperty]; // Add updated details to tile
-       
-        if (listProperty === "dueDate") {                     // Reset the inputs
-            details.value = format(new Date(), "yyyy-MM-dd")
-        } else if (listProperty === "priority") {
-            
-        } else {
-            details.value = details.ariaPlaceholder;
-        }
-         
-
+    } else {
+        details.value = details.ariaPlaceholder;
     }
      
 
@@ -372,7 +381,10 @@ function group() {
     group.appendChild(card); 
 }
 
+console.log(allTasks[allTasks.length - 1].checklist); 
+
 export {checkItemClicked, priorityIcon,textInput, lastAddedList, providedTitle, mainAreaClicks, addNewTask} 
+
 
 
 

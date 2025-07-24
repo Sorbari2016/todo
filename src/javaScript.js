@@ -13,7 +13,11 @@ sideBarTop.addEventListener("click", function(event) {
     if (event.target.tagName === "BUTTON") {
         const buttonID = event.target.getAttribute("id")
 
-        checkItemClicked(buttonID); 
+        if (buttonID === "task") {
+         checkItemClicked(buttonID); 
+        } else {
+
+        }
     }
 });
 
@@ -108,6 +112,8 @@ function addButtonTask() {
   }); 
 
 }
+
+
 
 export {addButtonTask}
 

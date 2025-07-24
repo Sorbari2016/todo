@@ -102,10 +102,15 @@ input {
 
 
 /* Rule for the sibe bar items */
-.item {
+.item, 
+.item-v {
    display: flex;
    gap: 1rem; 
    align-items: center;
+}
+
+.item-v {
+   flex-direction: column;
 }
 
 /* Positioning the second item of the lower section */
