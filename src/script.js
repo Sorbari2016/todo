@@ -79,7 +79,7 @@ function search() {
 
 // Track last added list, and the last input.
 let lastAddedList, providedTitle;
-let expand;  
+let expand, checkBox;   
 
 
 // Method toa add a list tile, once a list is added this way
@@ -92,7 +92,7 @@ function listTile(list) {
         <div class = "title-area">
             <input type = "checkbox" id = "checklist" class = "change">
             <div class = "expand">
-                <p>${list.title}</p>
+                <p id = title-text>${list.title}</p>
             </div>        
             <button type = "button">
                 <img src = '${importantIcon}'>
@@ -101,9 +101,19 @@ function listTile(list) {
         <div class = "other-details">
         </div>`  
     mainArea.appendChild(tile); 
-    expand = document.querySelector(".expand");  
+    expand = document.querySelector(".expand"), checkBox = document.querySelector("#checklist")    
     expand.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
+    checkBox.addEventListener("change", function() {
+        const checkboxID = this.id;
+        updateList(checkboxID);      
+        const listTitle = document.querySelector("#title-text"); 
+        listTitle.classList.add("strikethrough"); 
+        mainArea.removeChild(tile); 
+
+    })
+
 }
+
 
 addNewTask(); 
 
@@ -310,8 +320,7 @@ function updateList(listProperty) {
         
     } else {
         details.value = details.ariaPlaceholder;
-    }
-     
+    }     
 
 }
 
@@ -374,7 +383,3 @@ function group() {
 console.log(allTasks[allTasks.length - 1].checklist); 
 
 export {checkItemClicked, priorityIcon,textInput, lastAddedList, providedTitle, mainAreaClicks, addNewTask} 
-
-
-
-

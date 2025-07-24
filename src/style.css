@@ -288,3 +288,7 @@ h4 {
    background-color: blue;
 }
 
+.strikethrough {
+   text-decoration: line-through;
+}
+

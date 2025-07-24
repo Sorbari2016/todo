@@ -16,7 +16,7 @@ sideBarTop.addEventListener("click", function(event) {
         if (buttonID === "task") {
          checkItemClicked(buttonID); 
         } else {
-
+            queryAllTasks(); 
         }
     }
 });
@@ -113,6 +113,11 @@ function addButtonTask() {
 
 }
 
+// Create a method to handle the Upcoming, Completed, & Today sections of the sidebar. 
+function queryAllTasks() {
+
+    
+}
 
 
 export {addButtonTask}
