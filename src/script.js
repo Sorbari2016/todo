@@ -76,13 +76,6 @@ function search() {
 
 
 // Create and select a third ribbon, append to main area.
-const tile = document.createElement("div"); 
-                Object.assign(tile, {
-                    className:"ribbon ribbon3 pry_mgn pry_pad"
-                })
-mainArea.appendChild(tile); 
-tile.style.visibility = "hidden"; 
-
 
 // Track last added list, and the last input.
 let lastAddedList, providedTitle;
@@ -90,8 +83,11 @@ let expand;
 
 
 // Method toa add a list tile, once a list is added this way
-function listTile(list) {                    
-    tile.style.visibility = "visible"; 
+function listTile(list) {       
+    const tile = document.createElement("div"); 
+                Object.assign(tile, {
+                    className:"ribbon tile pry_mgn pry_pad"
+                })             
     tile.innerHTML = `
         <div class = "title-area">
             <input type = "checkbox" id = "checklist" class = "change">
@@ -104,8 +100,8 @@ function listTile(list) {
         </div>
         <div class = "other-details">
         </div>`  
-
-     expand = document.querySelector(".expand");  
+    mainArea.appendChild(tile); 
+    expand = document.querySelector(".expand");  
     expand.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
 }
 
@@ -164,6 +160,7 @@ function mainAreaClicks() {
 //To view/Add list details
 function addListDetails() {
     expand.removeEventListener("click", addListDetails); // Remove click event from the tile 
+    const tile = document.querySelector(".tile"); 
     tile.style.height   = "10rem"; 
     const titleheading = document.querySelector(".title-area p"); 
     titleheading.style.fontWeight = "bold"; 
