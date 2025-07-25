@@ -60,18 +60,10 @@ function search() {
     const matchingTasks = allTasks.filter(taskMatches)
 
     matchingTasks.forEach(function(task) {
-        const taskElement = document.createElement("div");
-        taskElement.classList.add("task_item");
-        taskElement.innerHTML = `
-          <div class = "task_details">
-            <input type = "checkbox"> 
-            <p>${task.title}
-            <p>Deadline: ${task.dueDate}</p>
-          </div>
-        `;
-
-        mainArea.appendChild(taskElement); 
-    });
+    
+        listTile(task)
+        
+    })
 }
 
 
