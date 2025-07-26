@@ -71,7 +71,7 @@ function search() {
 
 // Track last added list, and the last input.
 let lastAddedList, providedTitle;
-let expand, checkBox;   
+let expand, checkBox, numberOfTiles = 0; 
 
 
 // Method toa add a list tile, once a list is added this way
@@ -374,4 +374,4 @@ function group() {
 
 console.log(allTasks[allTasks.length - 1].checklist); 
 
-export {checkItemClicked, priorityIcon,textInput, lastAddedList, providedTitle, mainAreaClicks, addNewTask} 
+export {checkItemClicked, priorityIcon,textInput, lastAddedList, providedTitle, mainAreaClicks, addNewTask,listTile} 

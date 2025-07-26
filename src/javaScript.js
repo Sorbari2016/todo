@@ -1,10 +1,11 @@
 // SIDEBAR DOM STUFF
 
 // IMPORTS 
-import { checkItemClicked, priorityIcon } from "./script";
+import { checkItemClicked, priorityIcon,listTile } from "./script";
 import { clearMainArea, mainArea, reLoadMainArea} from "./module2";
 import { addNewTodo } from "./module";
 import allTasks from "./module";
+import { format, compareAsc } from "date-fns";
 
 // Add Event delegation on the sidebar top section
 const sideBarTop = document.querySelector(".upper_section"); 
@@ -12,14 +13,16 @@ const sideBarTop = document.querySelector(".upper_section");
 sideBarTop.addEventListener("click", function(event) {
     if (event.target.tagName === "BUTTON") {
         const buttonID = event.target.getAttribute("id")
-
-        if (buttonID === "task") {
-         checkItemClicked(buttonID); 
-        } else {
-            queryAllTasks(); 
+        if (buttonID === "tasks") {
+            checkItemClicked(buttonID); 
+        } else  {
+            clearMainArea(); 
+            queryAllTasks(allTasks, buttonID); 
         }
+        
     }
 });
+
 
 // Create Sidebar 'Add Task' Button Method 
 function addButtonTask() {
@@ -68,10 +71,11 @@ function addButtonTask() {
             </span> 
         </div> 
     </form>`
+    
     mainArea.appendChild(list);
     
     //Add a click events to the cancel, & Add Task buttons
-    const addTaskButtons = document.querySelectorAll("button[type = 'button']");
+    const addTaskButtons = list.querySelectorAll("button[type = 'button']");
 
     addTaskButtons.forEach((button) => {    
         button.addEventListener("click", function() {
@@ -110,18 +114,46 @@ function addButtonTask() {
         }
     });
   }); 
-
 }
+
+// Track today's date. 
+const today = new Date()
+console.log(today)
 
 // Create a method to handle the Upcoming, Completed, & Today sections of the sidebar. 
-function queryAllTasks() {
+function queryAllTasks(array, sectionID) {
+    let filteredList, listDueDate; 
+    if (sectionID === "upcoming_tasks") {
+        filteredList = array.filter(function(list){  // first filter for upcoming tasks.   
+            listDueDate = new Date(list.dueDate);
+            listDueDate.setHours(0, 0, 0, 0);  
+            return listDueDate > today; 
+        })
+    } else if (sectionID = "completed_tasks") {
+        filteredList = array.filter(function(list){
+            const listChecklist = list.checklist; 
+            return listChecklist === true; 
+        })
+    } else {
+        filteredList = array.filter(function(list) {
+            listDueDate = new Date(list.dueDate);
+            listDueDate.setHours(0, 0, 0, 0); 
+            return listDueDate === today; 
+        })
+    }
 
-    
-}
+    if (filteredList) {
+        filteredList.forEach(function(task) {
+            listTile(task); 
+        });
+    }
 
+    return filteredList 
+} 
+
+addNewTodo("Pray","", new Date(), "",  "", true); 
 
 export {addButtonTask}
-
 
 
 
