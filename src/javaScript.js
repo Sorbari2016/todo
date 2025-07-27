@@ -117,7 +117,8 @@ function addButtonTask() {
 }
 
 // Track today's date. 
-const today = new Date()
+const today = new Date();
+today.setHours(0, 0, 0, 0); 
 console.log(today)
 
 // Create a method to handle the Upcoming, Completed, & Today sections of the sidebar. 
@@ -129,7 +130,7 @@ function queryAllTasks(array, sectionID) {
             listDueDate.setHours(0, 0, 0, 0);  
             return listDueDate > today; 
         })
-    } else if (sectionID = "completed_tasks") {
+    } else if (sectionID === "completed_tasks") {
         filteredList = array.filter(function(list){
             const listChecklist = list.checklist; 
             return listChecklist === true; 
@@ -138,7 +139,7 @@ function queryAllTasks(array, sectionID) {
         filteredList = array.filter(function(list) {
             listDueDate = new Date(list.dueDate);
             listDueDate.setHours(0, 0, 0, 0); 
-            return listDueDate === today; 
+            return listDueDate.getTime() === today.getTime(); 
         })
     }
 
@@ -150,6 +151,10 @@ function queryAllTasks(array, sectionID) {
 
     return filteredList 
 } 
+
+
+// update the number of tasks 
+
 
 addNewTodo("Pray","", new Date(), "",  "", true); 
 
