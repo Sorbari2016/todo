@@ -1,6 +1,6 @@
 // APP LOGIC II 
 
-// Import the images 
+// Imports
 import sunnyIcon from './images/sunny.png'; 
 import sortIcon from "./images/arrow.png"; 
 import folderIcon from "./images/folder.png"; 
@@ -12,26 +12,20 @@ import {mainAreaClicks, addNewTask,textInput, providedTitle, lastAddedList} from
 import allTasks from './module';
 
 
-
-
 // Add the current day, & Date to the main area
-const thisDay = format(new Date(), "eeee");
-const currentDate = format(new Date(), "MMMM d"); 
-const currentDay = `${thisDay}, ${currentDate}`; 
-const todayDate = document.querySelector(".today_date");
-todayDate.textContent = currentDay; 
- 
+const now = new Date();
+const currentDay = `${format(now, "eeee")}, ${format(now, "MMMM d")}`;
+document.querySelector(".today_date").textContent = currentDay;
 
 // Select the main area node
 const mainArea = document.querySelector(".main_area");
 
-
+// Function to clear main area. 
 function clearMainArea() {
     mainArea.innerHTML = ""; 
 }
 
 // Build the Main Area Section
-
 function reLoadMainArea() {
     mainArea.innerHTML = `
                 <div class="ribbon ribbon1 pry_mgn sdy_pad">
@@ -76,12 +70,10 @@ function reLoadMainArea() {
                 </div>
             </div>`
     mainArea.classList.add("main_area"); 
-    const mainContentArea = document.getElementById("main_content_area");
-    mainContentArea.appendChild(mainArea);
-
+    document.getElementById("main_content_area").appendChild(mainArea); 
     mainAreaClicks(); 
     addNewTask(); 
 }
 
-// Export the functions
-export {reLoadMainArea, clearMainArea, mainArea, sunnyIcon, todayDate, currentDay, sortIcon, folderIcon}; 
+// Exports
+export {reLoadMainArea, clearMainArea, mainArea, sunnyIcon, currentDay, sortIcon, folderIcon}; 

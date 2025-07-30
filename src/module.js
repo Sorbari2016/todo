@@ -1,11 +1,8 @@
 
 // APP LOGIC I
-// Creating the bluprints, and major creation methods. 
-
+ 
+// Imports
 import { format, compareAsc } from "date-fns";
-
-
-// Create a List
 
 //Create a blueprint for the list objects
 class Todo {
@@ -87,7 +84,7 @@ const allTasks = [];
 // Create class to addGroupedTasks
 class groupedTasks {
 	constructor(groupTitle){
-    	   this.groupTitle = groupTitle;
+    	this.groupTitle = groupTitle;
         this.groupLists = [];  
     }
 }
@@ -157,9 +154,9 @@ const firstFolder = addNewFolder("Music");
 const firstTask = addNewTodo("Finish Web Dev", "Before the end of the year", "07/07/2025", "I will be really happy", "medium", false); 
 const secondTask = addNewTodo("Marry"); 
 
-console.log(allLists);
+console.log(allTasks[0].groupLists); 
 
-
+// Exports
 export default allTasks; 
 export {addNewFolder, addNewTodo}; 
  
