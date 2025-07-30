@@ -3,7 +3,7 @@
 // IMPORTS 
 import { checkItemClicked, priorityIcon,listTile } from "./script";
 import { clearMainArea, mainArea, reLoadMainArea} from "./module2";
-import { addNewTodo, completedTasks } from "./module";
+import { addNewTodo } from "./module";
 import allTasks from "./module";
 import { format, compareAsc } from "date-fns";
 
@@ -155,21 +155,21 @@ function queryAllTasks(array, sectionID) {
 
 
 // update the number of tasks 
-getNumberofTasks(); 
+// getNumberofTasks(); 
 
-function getNumberofTasks() {
-    const noOfCompletedTasks = sideBarTop.querySelector("#no_of_comp"); 
+// function getNumberofTasks() {
+//     const noOfCompletedTasks = sideBarTop.querySelector("#no_of_comp"); 
     
-    noOfCompletedTasks.textContent = completedTasks.length;
+//     noOfCompletedTasks.textContent = completedTasks.length;
     
-     const filteredList = allTasks.filter(function(list){  // first filter for upcoming tasks.   
-         const listDueDate = new Date(list.dueDate);
-        listDueDate.setHours(0, 0, 0, 0); 
-        return listDueDate.getTime() >= today.getTime(); 
-    })
+//      const filteredList = allTasks.filter(function(list){  // first filter for upcoming tasks.   
+//          const listDueDate = new Date(list.dueDate);
+//         listDueDate.setHours(0, 0, 0, 0); 
+//         return listDueDate.getTime() >= today.getTime(); 
+//     })
 
 
-}
+// }
 
 
 addNewTodo("Pray","", new Date(), "",  "", true); 
