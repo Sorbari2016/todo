@@ -103,10 +103,14 @@ input {
 
 /* Rule for the sibe bar items */
 .item, 
-.item-v {
+.item-v, 
+.item-b {
    display: flex;
-   gap: 1rem; 
    align-items: center;
+}
+
+.item {
+   gap: 1rem; 
 }
 
 .item-v {

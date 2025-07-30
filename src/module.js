@@ -128,7 +128,7 @@ console.log(allTasks);
 console.log(completedTasks, uncompletedTasks); 
 
 export default allTasks; 
-export {addNewFolder, addNewTodo}; 
+export {addNewFolder, addNewTodo, completedTasks}; 
  
 
 
