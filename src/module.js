@@ -87,7 +87,7 @@ const allTasks = [];
 // Create class to addGroupedTasks
 class groupedTasks {
 	constructor(groupTitle){
-    	this.groupTitle = groupTitle;
+    	   this.groupTitle = groupTitle;
         this.groupLists = [];  
     }
 }
@@ -99,6 +99,7 @@ function addGroupedTasks(groupTitle) {
 }
 
 // Create different groups of arrays
+addGroupedTasks("combinedTasks");
 addGroupedTasks("project"); 
 addGroupedTasks("userProjects");
 addGroupedTasks("completedTasks");  
@@ -110,7 +111,7 @@ addGroupedTasks("todaysTasks");
 // To add a new user defined folder
 function addNewFolder(title) {
     const userFolder = new NewFolder(title);  
-    allTasks[1].groupLists.push(userFolder)
+    allTasks[2].groupLists.push(userFolder)
     return userFolder;
 }
 
@@ -121,17 +122,17 @@ function addNewTodo(title, description = " ", dueDate = format(new Date(), "MM/d
     allTasks[0].groupLists.push(newTodo);  // Keep here, so that all can be tracked.
 
     if (newTodo.checklist === true) {  // Check if the checklist is false or true, & place in app array. 
-        allTasks[2].groupLists.push(newTodo); 
+        allTasks[3].groupLists.push(newTodo); 
     } else {
-        allTasks[3].groupLists.push(newTodo);
+        allTasks[4].groupLists.push(newTodo);
     }
 
     if (projectName !== "project") {
         
         let targetFolder; 
         
-        for (let i = 0; i < allTasks[1].groupLists.length; i++) {  // We find the folder the user filled, and save it. 
-            let folder = allTasks[1].groupLists[i]; 
+        for (let i = 0; i < allTasks[2].groupLists.length; i++) {  // We find the folder the user filled, and save it. 
+            let folder = allTasks[2].groupLists[i]; 
             if (folder.title === projectName) {
                 targetFolder = folder; 
 
@@ -145,19 +146,10 @@ function addNewTodo(title, description = " ", dueDate = format(new Date(), "MM/d
             alert(projectName + " " + "does not exist"); 
         }
     } else {
-        allTasks[0].groupLists.push(newTodo); // Default Project. 
+        allTasks[1].groupLists.push(newTodo); // Default Project. 
     }  
     return newTodo;  
 }
-
-// To get all the lists
-function getAllTasks() {
-    return allTasks.flatMap(group => group.groupLists);
-}
-
-// Save all these lists in one variable
-let allLists; 
-allLists = getAllTasks();
 
 
 const firstFolder = addNewFolder("Music"); 
@@ -168,9 +160,7 @@ const secondTask = addNewTodo("Marry");
 console.log(allLists);
 
 
-
-
-export default allLists; 
+export default allTasks; 
 export {addNewFolder, addNewTodo}; 
  
 
