@@ -26,7 +26,7 @@ function clearMainArea() {
 }
 
 // Build the Main Area Section
-function reLoadMainArea() {
+function renderMainAreanArea() {
     mainArea.innerHTML = `
                 <div class="ribbon ribbon1 pry_mgn sdy_pad">
                     <div class="today item">
@@ -76,4 +76,4 @@ function reLoadMainArea() {
 }
 
 // Exports
-export {reLoadMainArea, clearMainArea, mainArea, sunnyIcon, currentDay, now, sortIcon, folderIcon}; 
+export {renderMainAreanArea, clearMainArea, mainArea, sunnyIcon, currentDay, now, sortIcon, folderIcon}; 

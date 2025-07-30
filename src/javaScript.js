@@ -2,7 +2,7 @@
 
 // IMPORTS 
 import { checkItemClicked, priorityIcon,createTaskTile } from "./script";
-import { clearMainArea, mainArea, reLoadMainArea, currentDay, now}  from "./module2";
+import { clearMainArea, mainArea, renderMainAreanArea, currentDay, now}  from "./module2";
 import { addNewTodo } from "./module";
 import allTasks from "./module";
 import { format, compareAsc } from "date-fns";
@@ -79,7 +79,7 @@ function addButtonTask() {
   
         if (buttonID === "cancel") {
             clearMainArea();
-            reLoadMainArea();
+            renderMainAreanArea();
         } else {
             const newListTitle = document.getElementById("title").value;
             const newListDescription = document.getElementById("description").value;
@@ -96,13 +96,13 @@ function addButtonTask() {
                     addNewTodo(newListTitle,newListDescription, new Date(newListDueDate), newListNotes,newListPriorityLevel, newListCheck);
                     alert("Your List has been created ! ")
                     clearMainArea();
-                    reLoadMainArea();
+                    renderMainAreanArea();
                 } else {
                     newListPriorityLevel = newListPriority.value;
                     addNewTodo(newListTitle, newListDescription, new Date(newListDueDate), newListNotes, newListPriorityLevel, newListCheck)
                     alert("Your List has been created ! "); 
                     clearMainArea();
-                    reLoadMainArea();
+                    renderMainAreanArea();
                 }
             } else {
                 alert("Your list MUST have a title"); 
