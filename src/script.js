@@ -1,6 +1,6 @@
 // DOM STUFFS
 
-// Import statements
+// Imports
 import allTasks from "./module.js";
 import calendarIcon from "./images/calendar.png";
 import descriptionIcon from "./images/description.png"; 
@@ -57,17 +57,14 @@ function search() {
         return searchLetters.some(letterMatches);
     }
 
-    const matchingTasks = allTasks.filter(taskMatches)
+    const matchingTasks = allTasks[0].groupLists.filter(taskMatches); 
 
     matchingTasks.forEach(function(task) {
     
-        listTile(task)
+        createTaskTile(task);
         
     })
 }
-
-
-// Create and select a third ribbon, append to main area.
 
 // Track last added list, and the last input.
 let lastAddedList, providedTitle;
@@ -75,7 +72,7 @@ let expand, checkBox, numberOfTiles = 0;
 
 
 // Method toa add a list tile, once a list is added this way
-function listTile(list) {       
+function createTaskTile(list) {       
     const tile = document.createElement("div"); 
                 Object.assign(tile, {
                     className:"ribbon tile pry_mgn pry_pad"
@@ -94,16 +91,13 @@ function listTile(list) {
         </div>`  
     mainArea.appendChild(tile); 
     expand = document.querySelector(".expand"), checkBox = document.querySelector("#checklist")    
-    expand.addEventListener("click", addListDetails); // Add a click event to the tile created dynamically
+    expand.addEventListener("click", addTaskDetails); // Add a click event to the tile created dynamically
     checkBox.addEventListener("change", function() {
         const checkboxID = this.id;
         updateList(checkboxID);      
-        const listTitle = document.querySelector("#title-text"); 
-        listTitle.classList.add("strikethrough"); 
+        tile.querySelector("#title-text").classList.add("strikethrough"); 
         mainArea.removeChild(tile); 
-
-    })
-
+    }); 
 }
 
 
@@ -131,15 +125,13 @@ function createTask() {
                 
         addNewTodo(textInput.value.trim());
         
-        lastAddedList = allTasks[allTasks.length - 1 ]
-        listTile(lastAddedList); 
+        lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1 ]; 
+        createTaskTile(lastAddedList); 
 
         textInput.value = " "; 
         
     }
 }
-
-
 
 // Add click events to the main area click items
 mainAreaClicks(); 
@@ -158,14 +150,12 @@ function mainAreaClicks() {
     }
 }
 
-
 //To view/Add list details
-function addListDetails() {
+function addTaskDetails() {
     expand.removeEventListener("click", addListDetails); // Remove click event from the tile 
     const tile = document.querySelector(".tile"); 
     tile.style.height   = "10rem"; 
-    const titleheading = document.querySelector(".title-area p"); 
-    titleheading.style.fontWeight = "bold"; 
+    document.querySelector(".title-area p").style.fontWeight = "bold"; 
 
     const ribbon2 = document.querySelector(".ribbon2");
     ribbon2.innerHTML = " ";
@@ -187,9 +177,8 @@ function addListDetails() {
     main.classList.add("main"), leftMain.classList.add("left_main"), 
     rightMain.classList.add("right_main"); 
 
-    lastAddedList = allTasks[allTasks.length -1 ];   
-     
-
+    lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1 ];   
+    
     rightMain.innerHTML = 
     `<div id = "list_header" class = "details">
         <span>
@@ -257,8 +246,7 @@ function addListDetails() {
     leftMain.append(ribbon, ribbon2, tile);
 
     // Add Date created
-    const dateCreated = document.querySelector(".date_created"); 
-    dateCreated.innerHTML = 
+    main.querySelector(".date_created").innerHTML = 
         `<p>${lastAddedList.dateCreated}</p>`
 
 
@@ -269,7 +257,7 @@ function addListDetails() {
             if (event.key === "Enter") {
     
                 const fieldFilled = this.getAttribute("id"); 
-                updateList(fieldFilled); 
+                updateTask(fieldFilled); 
             }
         })
     }
@@ -280,7 +268,7 @@ function addListDetails() {
         changeElements[i].addEventListener("change", function(){
         const detailField = this.getAttribute("id"); 
 
-        updateList(detailField); 
+        updateTask(detailField); 
     })
   }
 
@@ -289,16 +277,15 @@ function addListDetails() {
 
 
 // Method to update the created list. 
-function updateList(listProperty) {    
-    const otherDetails = document.querySelector(".other-details"), 
-    addedDetails  = document.createElement("p"); 
-    otherDetails.append(addedDetails); 
+function updateTask(listProperty) {    
+    const addedDetails  = document.createElement("p"); 
+    document.querySelector(".other-details").append(addedDetails); 
 
     const details = document.getElementById(listProperty)
     if (listProperty === "checklist") {
         lastAddedList[listProperty] = details.checked; 
     } else {
-        lastAddedList = allTasks[allTasks.length -1]; 
+        lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1 ];
         lastAddedList[listProperty] = details.value;
     } 
     details.disabled = true; 
@@ -372,6 +359,5 @@ function group() {
     group.appendChild(card); 
 }
 
-console.log(allTasks[allTasks.length - 1].checklist); 
 
-export {checkItemClicked, priorityIcon,textInput, lastAddedList, providedTitle, mainAreaClicks, addNewTask,listTile} 
+export {checkItemClicked, priorityIcon,textInput, lastAddedList, providedTitle, mainAreaClicks, addNewTask,createTaskTile} 

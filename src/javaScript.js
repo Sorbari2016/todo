@@ -1,7 +1,7 @@
 // SIDEBAR DOM STUFF
 
 // IMPORTS 
-import { checkItemClicked, priorityIcon,listTile } from "./script";
+import { checkItemClicked, priorityIcon,createTaskTile } from "./script";
 import { clearMainArea, mainArea, reLoadMainArea} from "./module2";
 import { addNewTodo } from "./module";
 import allTasks from "./module";
