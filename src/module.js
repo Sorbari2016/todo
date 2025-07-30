@@ -1,164 +1,140 @@
-
 // APP LOGIC I
- 
+
 // Imports
-import { format, compareAsc } from "date-fns";
+import { format } from "date-fns";
 
-//Create a blueprint for the list objects
+// Models
 class Todo {
-    constructor(title, description, dueDate, note, priority) {
-     this.dateCreated = format(new Date(), "MM/dd/yyyy");  // store the date the list was created
-     this.title = title; 
-     this.description = description; 
-     this.dueDate = format(new Date(dueDate), "MM/dd/yyyy"); 
-     this.note = note; 
-     this.priority = priority;
-
-    }
+  constructor(title, description, dueDate, note, priority) {
+    this.dateCreated = format(new Date(), "MM/dd/yyyy");
+    this.title = title;
+    this.description = description;
+    this.dueDate = format(new Date(dueDate), "MM/dd/yyyy");
+    this.note = note;
+    this.priority = priority;
+  }
 }
- 
 
 class TodoList extends Todo {
-    constructor(title, description, dueDate, note, priority, checklist) {
-        super(title, description, dueDate, note, priority);
+  constructor(title, description, dueDate, note, priority, checklist) {
+    super(title, description, dueDate, note, priority);
+    this.checklist = checklist;
+  }
 
-    this.checklist = checklist;      
-    }
+  priorityLevel() {
+    const map = {
+      high: "Top priority",
+      medium: "Medium priority",
+      low: "Low priority",
+    };
+    return map[this.priority] || "Invalid priority";
+  }
 
-    priorityLevel() {
-        let priorityStatus; 
-         
-          if (this.priority === "high") {
-              priorityStatus = "Top priority"; 
-          } else if (this.priority === "medium") {
-              priorityStatus = "Medium priority"; 
-          } else if (this.priority === "low") {
-              priorityStatus = "Low priority"; 
-          } else {
-              priorityStatus = "Invalid priority"; 
-          }
-         
-          return priorityStatus
-    }
+  checkOptions() {
+    return this.checklist ? "Completed" : "Not completed";
+  }
 
-    checkOptions() {
-        let options; 
-    
-        if (this.checklist === false ) {
-            options = "Not completed"; 
-        } else {
-            options = "Completed"; 
-        }
-        return options; 
-    }
-
-    listDetails() {
-        return `${this.dateCreated}, ${this.title}, ${this.description}, ${this.duedate}, 
-        ${this.note}, ${this.priorityLevel()}, ${this.checkOptions()}`; 
-    }
+  listDetails() {
+    return [
+      this.dateCreated,
+      this.title,
+      this.description,
+      this.dueDate,
+      this.note,
+      this.priorityLevel(),
+      this.checkOptions()
+    ].join(", ");
+  }
 }
 
-// Create a blueprint to create an empty folder
 class Folder {
-    constructor(title) {
-        this.title = title; 
-        this.lists = []; 
-    }
+  constructor(title) {
+    this.title = title;
+    this.lists = [];
+  }
 }
 
+class NewFolder extends Folder {
+  constructor(title) {
+    super(title);
+  }
 
-class NewFolder extends Folder{
-    constructor(title) {
-        super(title)
-    }
-
-    
-    folderLists(){
-        return this.lists;  
-    }
+  folderLists() {
+    return this.lists;
+  }
 }
 
-// To track all the lists created
-const allTasks = [];  
-
-// Create class to addGroupedTasks
-class groupedTasks {
-	constructor(groupTitle){
-    	this.groupTitle = groupTitle;
-        this.groupLists = [];  
-    }
+class GroupedTasks {
+  constructor(groupTitle) {
+    this.groupTitle = groupTitle;
+    this.groupLists = [];
+  }
 }
 
-// Create function to actually add the group tasks. 
+// Task Manager Data Store
+const allTasks = [];
+
+// Group Setup
 function addGroupedTasks(groupTitle) {
-    const newTaskGroup = new groupedTasks(groupTitle); 
-    allTasks.push(newTaskGroup); 	
+  const newGroup = new GroupedTasks(groupTitle);
+  allTasks.push(newGroup);
 }
 
-// Create different groups of arrays
 addGroupedTasks("combinedTasks");
-addGroupedTasks("project"); 
+addGroupedTasks("project");
 addGroupedTasks("userProjects");
-addGroupedTasks("completedTasks");  
+addGroupedTasks("completedTasks");
 addGroupedTasks("uncompletedTasks");
 addGroupedTasks("upcomingTasks");
 addGroupedTasks("todaysTasks");
 
-
-// To add a new user defined folder
 function addNewFolder(title) {
-    const userFolder = new NewFolder(title);  
-    allTasks[2].groupLists.push(userFolder)
-    return userFolder;
+  const folder = new NewFolder(title);
+  allTasks[2].groupLists.push(folder);
+  return folder;
 }
 
+function addNewTodo(
+  title,
+  description = " ",
+  dueDate = format(new Date(), "MM/dd/yyyy"),
+  note = " ",
+  priority = "medium",
+  checklist = false,
+  projectName = "project"
+) {
+  const task = new TodoList(title, description, dueDate, note, priority, checklist);
 
-// Create a function to help us create a new todo list, and add to the default directory, or user defined. 
-function addNewTodo(title, description = " ", dueDate = format(new Date(), "MM/dd/yyyy"), note = " ", priority = "medium",  checklist = false, projectName = "project"){
-    const newTodo = new TodoList(title, description, dueDate, note, priority, checklist)
-    allTasks[0].groupLists.push(newTodo);  // Keep here, so that all can be tracked.
+  allTasks[0].groupLists.push(task); // Combined tasks
 
-    if (newTodo.checklist === true) {  // Check if the checklist is false or true, & place in app array. 
-        allTasks[3].groupLists.push(newTodo); 
+  if (checklist) {
+    allTasks[3].groupLists.push(task);
+  } else {
+    allTasks[4].groupLists.push(task);
+  }
+
+  if (projectName !== "project") {
+    const targetFolder = allTasks[2].groupLists.find(folder => folder.title === projectName);
+    if (targetFolder) {
+      targetFolder.lists.push(task);
     } else {
-        allTasks[4].groupLists.push(newTodo);
+      alert(`${projectName} does not exist`);
     }
+  } else {
+    allTasks[1].groupLists.push(task);
+  }
 
-    if (projectName !== "project") {
-        
-        let targetFolder; 
-        
-        for (let i = 0; i < allTasks[2].groupLists.length; i++) {  // We find the folder the user filled, and save it. 
-            let folder = allTasks[2].groupLists[i]; 
-            if (folder.title === projectName) {
-                targetFolder = folder; 
-
-            break 
-            }
-        }
-
-        if (targetFolder) {                        // We push the list to the list ppt of the folder. 
-            targetFolder.lists.push(newTodo) 
-        } else {
-            alert(projectName + " " + "does not exist"); 
-        }
-    } else {
-        allTasks[1].groupLists.push(newTodo); // Default Project. 
-    }  
-    return newTodo;  
+  return task;
 }
 
+// Test Data
+const firstFolder = addNewFolder("Music");
+const firstTask = addNewTodo("Finish Web Dev", "Before the end of the year", "07/07/2025", "I will be really happy", "medium", false);
+const secondTask = addNewTodo("Marry");
 
-const firstFolder = addNewFolder("Music"); 
-
-const firstTask = addNewTodo("Finish Web Dev", "Before the end of the year", "07/07/2025", "I will be really happy", "medium", false); 
-const secondTask = addNewTodo("Marry"); 
-
-console.log(allTasks[0].groupLists); 
+// Debug
+console.log(allTasks[0].groupLists);
 
 // Exports
-export default allTasks; 
-export {addNewFolder, addNewTodo}; 
- 
-
-
+export default allTasks;
+export { addNewFolder, addNewTodo };
