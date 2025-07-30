@@ -19,9 +19,7 @@ class Todo {
 
     }
 }
-
-// Arrays to track completed and incomplet tasks 
-const completedTasks = [], uncompletedTasks = []; 
+ 
 
 class TodoList extends Todo {
     constructor(title, description, dueDate, note, priority, checklist) {
