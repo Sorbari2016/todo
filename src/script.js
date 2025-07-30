@@ -194,7 +194,7 @@ function addTaskDetails() {
             <button type = "button"> 
                 <img src = "${descriptionIcon}">
             </button>
-            <input type = "textarea" id = "description" placeholder = "Description">
+            <textarea id = "description" placeholder = "Description"></textarea>
         </span>
     </div>
     <div class = "details">
@@ -210,7 +210,7 @@ function addTaskDetails() {
             <button type = "button"> 
                 <img src = "${notesICon}">
             </button>
-            <input type = "textarea" id = "note" placeholder = "Add Note">
+            <textarea id = "note" placeholder = "Add Note"></textarea>
         </span>
     </div>
     <div class = "details">
