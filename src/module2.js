@@ -71,9 +71,37 @@ function renderMainAreanArea() {
             </div>`
     mainArea.classList.add("main_area"); 
     document.getElementById("main_content_area").appendChild(mainArea); 
+    document.querySelector(".today_date").textContent = currentDay;
     mainAreaClicks(); 
     addNewTask(); 
 }
 
+// Method to handle outside clicks
+function handleOutsideClick() {
+    document.addEventListener("click", (e) => {
+      const isInsideAllowedAreas = e.target.closest("#s") ||
+                                    e.target.closest("#g") ||
+                                    e.target.closest(".sort-dropdown") ||
+                                    e.target.closest(".group-dropdown") ||
+                                    e.target.closest("#search") || 
+                                    e.target.closest(".search-input");   // assumed input class
+  
+      if (!isInsideAllowedAreas) {
+        renderMainAreanArea();
+      }
+    });
+  }
+  
+
 // Exports
-export {renderMainAreanArea, clearMainArea, mainArea, sunnyIcon, currentDay, now, sortIcon, folderIcon}; 
+export {
+    renderMainAreanArea, 
+    clearMainArea, 
+    mainArea, 
+    sunnyIcon, 
+    currentDay, 
+    now, 
+    sortIcon, 
+    folderIcon, 
+    handleOutsideClick
+}; 

@@ -13,9 +13,12 @@ import importantIcon from "./images/important_icon.png";
 import deleteIcon from "./images/trash.png"; 
 import { addNewTodo,addNewFolder } from "./module.js";
 import { format, compareAsc, add, differenceInCalendarDays } from "date-fns";
-import { clearMainArea,mainArea, sortIcon} from "./module2";
+import { clearMainArea,mainArea, sortIcon, handleOutsideClick} from "./module2";
 import { addButtonTask } from "./javaScript.js";
 
+
+// Handle clicks outside 
+handleOutsideClick(); 
 
 // The search, & first text inputs. 
 
