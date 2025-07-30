@@ -25,7 +25,7 @@ document.querySelector(".upper_section").addEventListener("click", function(even
 // Create Sidebar 'Add Task' Button Method 
 function addButtonTask() {
     clearMainArea();
-    const list = mainArea.createElement("div"); 
+    const list = document.createElement("div"); 
     list.classList.add("list"); 
 
     list.innerHTML = 
@@ -37,13 +37,13 @@ function addButtonTask() {
             </span>    
         </div>
         <div class = "details">    
-            <input type = "textarea" id = "description" placeholder = "Description">
+            <textarea id = "description" placeholder = "Description"></textarea>
         </div>
         <div class = "details">
             <input type = "date" id = "dueDate">
         </div>
         <div class = "details">
-            <textarea id = "notes" placeholder = "Note">
+            <textarea id = "notes" placeholder = "Note"></textarea>
         </div>
         <div class = "details">
             <span>
@@ -139,7 +139,7 @@ function queryAllTasks(array, sectionID) {
 
     if (filteredList) {
         filteredList.forEach(function(task) {
-            listTile(task); 
+            createTaskTile(task); 
         });
     }
 

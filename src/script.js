@@ -94,7 +94,7 @@ function createTaskTile(list) {
     expand.addEventListener("click", addTaskDetails); // Add a click event to the tile created dynamically
     checkBox.addEventListener("change", function() {
         const checkboxID = this.id;
-        updateList(checkboxID);      
+        updateTask(checkboxID);      
         tile.querySelector("#title-text").classList.add("strikethrough"); 
         mainArea.removeChild(tile); 
     }); 
@@ -152,7 +152,7 @@ function mainAreaClicks() {
 
 //To view/Add list details
 function addTaskDetails() {
-    expand.removeEventListener("click", addListDetails); // Remove click event from the tile 
+    expand.removeEventListener("click", addTaskDetails); // Remove click event from the tile 
     const tile = document.querySelector(".tile"); 
     tile.style.height   = "10rem"; 
     document.querySelector(".title-area p").style.fontWeight = "bold"; 
