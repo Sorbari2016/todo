@@ -2,22 +2,20 @@
 
 // IMPORTS 
 import { checkItemClicked, priorityIcon,createTaskTile } from "./script";
-import { clearMainArea, mainArea, reLoadMainArea} from "./module2";
+import { clearMainArea, mainArea, reLoadMainArea, currentDay, now}  from "./module2";
 import { addNewTodo } from "./module";
 import allTasks from "./module";
 import { format, compareAsc } from "date-fns";
 
 // Add Event delegation on the sidebar top section
-const sideBarTop = document.querySelector(".upper_section"); 
-
-sideBarTop.addEventListener("click", function(event) {
+document.querySelector(".upper_section").addEventListener("click", function(event) {
     if (event.target.tagName === "BUTTON") {
         const buttonID = event.target.getAttribute("id")
         if (buttonID === "tasks") {
             checkItemClicked(buttonID); 
         } else  {
             clearMainArea(); 
-            queryAllTasks(allTasks, buttonID); 
+            queryAllTasks(allTasks[0].groupLists, buttonID); 
         }
         
     }
@@ -27,7 +25,7 @@ sideBarTop.addEventListener("click", function(event) {
 // Create Sidebar 'Add Task' Button Method 
 function addButtonTask() {
     clearMainArea();
-    const list = document.createElement("div"); 
+    const list = mainArea.createElement("div"); 
     list.classList.add("list"); 
 
     list.innerHTML = 
@@ -45,7 +43,7 @@ function addButtonTask() {
             <input type = "date" id = "dueDate">
         </div>
         <div class = "details">
-            <input type = "textarea" id = "notes" placeholder = "Note">
+            <textarea id = "notes" placeholder = "Note">
         </div>
         <div class = "details">
             <span>
@@ -75,9 +73,7 @@ function addButtonTask() {
     mainArea.appendChild(list);
     
     //Add a click events to the cancel, & Add Task buttons
-    const addTaskButtons = list.querySelectorAll("button[type = 'button']");
-
-    addTaskButtons.forEach((button) => {    
+    list.querySelectorAll("button[type = 'button']").forEach((button) => {    
         button.addEventListener("click", function() {
         const buttonID = this.getAttribute("id");
   
@@ -117,9 +113,7 @@ function addButtonTask() {
 }
 
 // Track today's date. 
-const today = new Date();
-today.setHours(0, 0, 0, 0); 
-console.log(today)
+now.setHours(0, 0, 0, 0); 
 
 // Create a method to handle the Upcoming, Completed, & Today sections of the sidebar. 
 function queryAllTasks(array, sectionID) {
@@ -128,7 +122,7 @@ function queryAllTasks(array, sectionID) {
         filteredList = array.filter(function(list){  // first filter for upcoming tasks.   
             listDueDate = new Date(list.dueDate);
             listDueDate.setHours(0, 0, 0, 0);  
-            return listDueDate > today; 
+            return listDueDate > now; 
         })
     } else if (sectionID === "completed_tasks") {
         filteredList = array.filter(function(list){
@@ -139,7 +133,7 @@ function queryAllTasks(array, sectionID) {
         filteredList = array.filter(function(list) {
             listDueDate = new Date(list.dueDate);
             listDueDate.setHours(0, 0, 0, 0); 
-            return listDueDate.getTime() === today.getTime(); 
+            return listDueDate.getTime() === now.getTime(); 
         })
     }
 
@@ -155,21 +149,13 @@ function queryAllTasks(array, sectionID) {
 
 
 // update the number of tasks 
-// getNumberofTasks(); 
+getNumberofTasks(); 
 
-// function getNumberofTasks() {
-//     const noOfCompletedTasks = sideBarTop.querySelector("#no_of_comp"); 
-    
-//     noOfCompletedTasks.textContent = completedTasks.length;
-    
-//      const filteredList = allTasks.filter(function(list){  // first filter for upcoming tasks.   
-//          const listDueDate = new Date(list.dueDate);
-//         listDueDate.setHours(0, 0, 0, 0); 
-//         return listDueDate.getTime() >= today.getTime(); 
-//     })
-
-
-// }
+function getNumberofTasks() {
+    document.querySelector("#no_of_comp").textContent = allTasks[3].groupLists.length;
+    document.querySelector("#no_of_up").textContent = allTasks[5].groupLists.length
+    document.querySelector("#no_of_tod").textContent = allTasks[6].groupLists.length
+}
 
 
 addNewTodo("Pray","", new Date(), "",  "", true); 

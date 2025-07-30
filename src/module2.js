@@ -76,4 +76,4 @@ function reLoadMainArea() {
 }
 
 // Exports
-export {reLoadMainArea, clearMainArea, mainArea, sunnyIcon, currentDay, sortIcon, folderIcon}; 
+export {reLoadMainArea, clearMainArea, mainArea, sunnyIcon, currentDay, now, sortIcon, folderIcon}; 
