@@ -108,7 +108,36 @@ function handleOutsideClick() {
       renderMainArea();
     }
   };
+  document.addEventListener('click', outsideClickListener); 
 }
+
+// Create factory function to return a task/list detail
+function createDetailBlock({ icon, inputType, id, placeholder = "", options = [] }) {
+    let inputElement = "";
+  
+    if (inputType === "textarea") {
+      inputElement = `<textarea id="${id}" placeholder="${placeholder}"></textarea>`;
+    } else if (inputType === "select") {
+      const optionElements = options
+        .map(option => `<option value="${option.value}">${option.label}</option>`)
+        .join("");
+      inputElement = `<select id="${id}" class="change">${optionElements}</select>`;
+    } else {
+      inputElement = `<input type="${inputType}" id="${id}" class="change" placeholder="${placeholder}">`;
+    }
+  
+    return `
+      <div class="details">
+        <span> 
+          <button type="button"> 
+            <img src="${icon}">
+          </button>
+          ${inputElement}
+        </span>
+      </div>
+    `;
+  }
+  
 
   
 
@@ -117,6 +146,7 @@ export {
     renderMainArea, 
     clearMainArea, 
     handleOutsideClick, 
+    createDetailBlock,
     mainArea, 
     sunnyIcon, 
     currentDay, 

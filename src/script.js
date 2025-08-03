@@ -13,7 +13,7 @@ import importantIcon from "./images/important_icon.png";
 import deleteIcon from "./images/trash.png"; 
 import { addNewTodo,addNewFolder } from "./module.js";
 import { format, compareAsc, add, differenceInCalendarDays } from "date-fns";
-import { clearMainArea,mainArea, sortIcon, handleOutsideClick,outsideClickListener, renderMainArea} from "./module2";
+import { clearMainArea,mainArea, sortIcon, handleOutsideClick,outsideClickListener, renderMainArea, createDetailBlock} from "./module2";
 import { addButtonTask } from "./javaScript.js";
 
 
@@ -35,7 +35,6 @@ const searchInput = document.querySelector("input[type = 'search']")
  
 // Method to run the search. 
 function search() { 
-    
     let searchItem = searchInput.value.trim();     
         
     clearMainArea(); 
@@ -198,43 +197,22 @@ function addTaskDetails(tile) {
                 <img src="${importantIcon}">
             </span> 
         </div>
-        <div class="details">
-            <span> 
-                <button type="button"> 
-                    <img src="${descriptionIcon}">
-                </button>
-                <textarea id="description" placeholder="Description"></textarea>
-            </span>
-        </div>
-        <div class="details">
-            <span> 
-                <button type="button"> 
-                    <img src="${calendarIcon}">
-                </button>
-                <input type="date" id="dueDate" class="change">
-            </span>
-        </div>
-        <div class="details">
-            <span> 
-                <button type="button"> 
-                    <img src="${notesICon}">
-                </button>
-                <textarea id="note" placeholder="Add Note"></textarea>
-            </span>
-        </div>
-        <div class="details">
-            <span> 
-                <button type="button"> 
-                    <img src="${priorityIcon}">
-                </button>
-                <select id="priority" class="change">
-                    <option value="none"></option>
-                    <option value="Top priority">Top priority</option>
-                    <option value="Medium priority">Medium priority</option>
-                    <option value="Low priority">Low priority</option>
-                </select>
-            </span>
-        </div>
+        ${createDetailBlock({ icon: descriptionIcon, inputType: "textarea", id: "description", placeholder: "Description" })}
+        ${createDetailBlock({ icon: calendarIcon, inputType: "date", id: "dueDate" })}
+        ${createDetailBlock({ icon: notesICon, inputType: "textarea", id: "note", placeholder: "Add Note" })}
+        ${createDetailBlock({
+            icon: priorityIcon, 
+            inputType: "select", 
+            id: 'priority', 
+                options: [
+                    {value: "",  label: "Select Priority"},
+                    {value: "Top priority",  label: "Top priority"},
+                    {value: "Medium priority",  label: "Medium priority"}, 
+                    {value: "Low priority",  label: "Low priority"} 
+                ]
+            })
+        }
+
         <hr/>
         <div id="footer">
             <footer>
@@ -245,15 +223,15 @@ function addTaskDetails(tile) {
                     </button> 
                 </span>
             </footer>
-        </div>
-    `;
+        </div>`
 
     main.append(leftMain, rightMain);
     leftMain.append(ribbon, ribbon2, tile);
     mainArea.appendChild(main);
 
     // Add date created
-    main.querySelector(".date_created").innerHTML = `<p>${lastAddedList.dateCreated}</p>`;
+    const formattedCreatedDate = `${format(lastAddedList.dateCreated, "eeee")}, ${format(lastAddedList.dateCreated, "MMMM d, yyyy")}`;
+    main.querySelector(".date_created").innerHTML = `<p>${formattedCreatedDate}</p>`;
 
     // Corrected textarea selector
     const textareaInputs = document.querySelectorAll("textarea");
