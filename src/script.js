@@ -75,27 +75,34 @@ let expand, checkBox, numberOfTiles = 0;
 // Method toa add a list tile, once a list is added this way
 function createTaskTile(list) {       
     const tile = document.createElement("div"); 
-                Object.assign(tile, {
-                    className:"ribbon tile pry_mgn pry_pad"
-                })             
+    Object.assign(tile, {
+        className: "ribbon tile pry_mgn pry_pad"
+    });
+
+    const checkboxId = `checklist-${Date.now()}`; // unique ID
+
     tile.innerHTML = `
-        <div class = "title-area">
-            <input type = "checkbox" id = "checklist" class = "change">
-            <div class = "expand">
-                <p id = title-text>${list.title}</p>
+        <div class="title-area">
+            <input type="checkbox" id="${checkboxId}" class="change">
+            <div class="expand">
+                <p id="title-text">${list.title}</p>
             </div>        
-            <button type = "button">
-                <img src = '${importantIcon}'>
+            <button type="button">
+                <img src='${importantIcon}'>
             </button>
         </div>
-        <div class = "other-details">
-        </div>`  
+        <div class="other-details"></div>`;  
+
     mainArea.appendChild(tile); 
-    expand = document.querySelector(".expand"), checkBox = document.querySelector("#checklist")    
-    expand.addEventListener("click", addTaskDetails); // Add a click event to the tile created dynamically
-    checkBox.addEventListener("change", function() {
-        const checkboxID = this.id;
-        updateTask(checkboxID);      
+
+    const expand = tile.querySelector(".expand");
+    const checkBox = tile.querySelector(`#${checkboxId}`);
+
+    // Pass the tile to addTaskDetails
+    expand.addEventListener("click", () => addTaskDetails(tile));
+
+    checkBox.addEventListener("change", function () {
+        updateTask(checkboxId);      
         tile.querySelector("#title-text").classList.add("strikethrough"); 
         mainArea.removeChild(tile); 
     }); 
@@ -155,127 +162,118 @@ function mainAreaClicks() {
 }
 
 //To view/Add list details
-function addTaskDetails() {
-    expand.removeEventListener("click", addTaskDetails); // Remove click event from the tile 
-    const tile = document.querySelector(".tile"); 
-    tile.style.height   = "10rem"; 
-    document.querySelector(".title-area p").style.fontWeight = "bold"; 
+function addTaskDetails(tile) {
+    tile.style.height = "10rem"; 
+    tile.querySelector(".title-area p").style.fontWeight = "bold"; 
 
     const ribbon2 = document.querySelector(".ribbon2");
-    ribbon2.innerHTML = " ";
-    ribbon2.innerHTML =
-    `<div class = "ribbon ribbon4 item pry_mgn sdy_pad">
-            <button class = "btn click">  
-                <img src = "${plusIcon}" alt = "add icon"> 
+    ribbon2.innerHTML = "";
+    ribbon2.innerHTML = `
+        <div class="ribbon ribbon4 item pry_mgn sdy_pad">
+            <button class="btn click">  
+                <img src="${plusIcon}" alt="add icon"> 
                 Add a New Task
-                </button> 
-            </div>`
+            </button> 
+        </div>`;
 
-    const ribbon = document.querySelector(".ribbon")
+    const ribbon = document.querySelector(".ribbon");
 
-    const main = document.createElement("div"),
-    leftMain = document.createElement("div"), 
-    rightMain = document.createElement("div"); 
+    const main = document.createElement("div");
+    const leftMain = document.createElement("div");
+    const rightMain = document.createElement("div");
 
+    main.classList.add("main");
+    leftMain.classList.add("left_main");
+    rightMain.classList.add("right_main");
 
-    main.classList.add("main"), leftMain.classList.add("left_main"), 
-    rightMain.classList.add("right_main"); 
+    lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1];
 
-    lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1 ];   
-    
-    rightMain.innerHTML = 
-    `<div id = "list_header" class = "details">
-        <span>
-            <button type = "type">
-                <input type = "checkbox" id = "checklist2" class = "change">
-            </button>
-            <h4>${lastAddedList.title}</h4>
-            <img src = "${importantIcon}">
-        </span> 
-    </div>
-    <div class = "details">
-        <span> 
-            <button type = "button"> 
-                <img src = "${descriptionIcon}">
-            </button>
-            <textarea id = "description" placeholder = "Description"></textarea>
-        </span>
-    </div>
-    <div class = "details">
-        <span> 
-            <button type = "button"> 
-                <img src = "${calendarIcon}">
-            </button>
-            <input type = "date" id = "dueDate" class = "change">
-        </span>
-    </div>
-    <div class = "details">
-        <span> 
-            <button type = "button"> 
-                <img src = "${notesICon}">
-            </button>
-            <textarea id = "note" placeholder = "Add Note"></textarea>
-        </span>
-    </div>
-    <div class = "details">
-        <span> 
-            <button type = "button"> 
-                <img src = "${priorityIcon}">
-            </button>
-            <select id = "priority" class = "change">
-                <option value = "none"></option>
-                <option value ="Top priority">Top priority</option>
-                <option value ="Medium priority">Medium priority</option>
-                <option value = "Low priority">Low priority</option>
-            </select>
-        </span>
-    </div>
-    <hr/>
-    <div id = "footer">
-        <footer>
+    rightMain.innerHTML = `
+        <div id="list_header" class="details">
             <span>
-                <div class = "date_created">
-                </div>
-                <button type = "button">
-                    <img src = "${deleteIcon}">
-                </button> 
+                <button type="type">
+                    <input type="checkbox" id="checklist2" class="change">
+                </button>
+                <h4>${lastAddedList.title}</h4>
+                <img src="${importantIcon}">
+            </span> 
+        </div>
+        <div class="details">
+            <span> 
+                <button type="button"> 
+                    <img src="${descriptionIcon}">
+                </button>
+                <textarea id="description" placeholder="Description"></textarea>
             </span>
-        </footer>
-    </div>
-    `
+        </div>
+        <div class="details">
+            <span> 
+                <button type="button"> 
+                    <img src="${calendarIcon}">
+                </button>
+                <input type="date" id="dueDate" class="change">
+            </span>
+        </div>
+        <div class="details">
+            <span> 
+                <button type="button"> 
+                    <img src="${notesICon}">
+                </button>
+                <textarea id="note" placeholder="Add Note"></textarea>
+            </span>
+        </div>
+        <div class="details">
+            <span> 
+                <button type="button"> 
+                    <img src="${priorityIcon}">
+                </button>
+                <select id="priority" class="change">
+                    <option value="none"></option>
+                    <option value="Top priority">Top priority</option>
+                    <option value="Medium priority">Medium priority</option>
+                    <option value="Low priority">Low priority</option>
+                </select>
+            </span>
+        </div>
+        <hr/>
+        <div id="footer">
+            <footer>
+                <span>
+                    <div class="date_created"></div>
+                    <button type="button">
+                        <img src="${deleteIcon}">
+                    </button> 
+                </span>
+            </footer>
+        </div>
+    `;
 
-    mainArea.appendChild(main); 
-
-    main.append(leftMain, rightMain); 
+    main.append(leftMain, rightMain);
     leftMain.append(ribbon, ribbon2, tile);
+    mainArea.appendChild(main);
 
-    // Add Date created
-    main.querySelector(".date_created").innerHTML = 
-        `<p>${lastAddedList.dateCreated}</p>`
+    // Add date created
+    main.querySelector(".date_created").innerHTML = `<p>${lastAddedList.dateCreated}</p>`;
 
-
-    // Add keyboard event to save a details 
-    const textareaInputs = document.querySelectorAll("input[type = 'textarea']"); 
-    for (let i = 0; i < textareaInputs.length; i++) {
-        textareaInputs[i].addEventListener("keydown", function(event) {
+    // Corrected textarea selector
+    const textareaInputs = document.querySelectorAll("textarea");
+    textareaInputs.forEach(textarea => {
+        textarea.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
-    
-                const fieldFilled = this.getAttribute("id"); 
-                updateTask(fieldFilled); 
+                const fieldFilled = this.getAttribute("id");
+                updateTask(fieldFilled);
             }
-        })
-    }
+        });
+    });
 
-    // Add change events
-    const changeElements = document.querySelectorAll(".change"); 
-    for (let i = 0; i < changeElements.length; i++) {
-        changeElements[i].addEventListener("change", function(){
-        const detailField = this.getAttribute("id"); 
-
-        updateTask(detailField); 
-    })
-  }
-
+    // Change event listeners for fields with .change
+    const changeElements = document.querySelectorAll(".change");
+    changeElements.forEach(element => {
+        element.addEventListener("change", function () {
+            const detailField = this.getAttribute("id");
+            updateTask(detailField);
+        });
+    });
 }
 
 

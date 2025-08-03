@@ -80,27 +80,34 @@ function renderMainArea() {
 let outsideClickListener;
 
 function handleOutsideClick() {
-  if (outsideClickListener) return; 
+  if (outsideClickListener) return;
+
+  const allowedSelectors = [
+    "#s",
+    "#g",
+    ".sort-dropdown",
+    ".group-dropdown",
+    "#search",
+    ".search-input",
+    "#mainArea",
+    ".add-btn",
+    "form",
+    "input",
+    "button",
+    ".expand",
+    ".ribbon",
+    ".right_main"
+  ];
 
   outsideClickListener = (e) => {
-    const isInsideAllowedAreas = e.target.closest("#s") ||
-                                 e.target.closest("#g") ||
-                                 e.target.closest(".sort-dropdown") ||
-                                 e.target.closest(".group-dropdown") ||
-                                 e.target.closest("#search") || 
-                                 e.target.closest(".search-input") || 
-                                 e.target.closest("#mainArea") || 
-                                 e.target.closest(".add-btn") || 
-                                 e.target.closest("form") || 
-                                 e.target.closest("input") || 
-                                 e.target.closest("button");
+    const isInsideAllowedAreas = allowedSelectors.some(selector =>
+      e.target.closest(selector)
+    );
 
     if (!isInsideAllowedAreas) {
       renderMainArea();
     }
   };
-
-  document.addEventListener("click", outsideClickListener);
 }
 
   
