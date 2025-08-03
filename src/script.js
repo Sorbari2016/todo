@@ -13,19 +13,17 @@ import importantIcon from "./images/important_icon.png";
 import deleteIcon from "./images/trash.png"; 
 import { addNewTodo,addNewFolder } from "./module.js";
 import { format, compareAsc, add, differenceInCalendarDays } from "date-fns";
-import { clearMainArea,mainArea, sortIcon, handleOutsideClick} from "./module2";
+import { clearMainArea,mainArea, sortIcon, handleOutsideClick,outsideClickListener, renderMainArea} from "./module2";
 import { addButtonTask } from "./javaScript.js";
 
 
 // Handle clicks outside 
 handleOutsideClick(); 
 
-// The search, & first text inputs. 
+// Search Area 
 
-// Add input events to the search input
-const searchInput = document.querySelector("input[type = 'search']"), 
-textInput = document.querySelector("input[type = 'text']"); 
-
+// Add input event to the search input
+const searchInput = document.querySelector("input[type = 'search']")
  
    searchInput.addEventListener("input", function() {
 
@@ -107,32 +105,35 @@ function createTaskTile(list) {
 addNewTask(); 
 
 // Method to add new list to main area
-function addNewTask(){
-    document.addEventListener("keydown", function(event) {  // Add keydown event,listen for Enter
+function addNewTask() {
+    const addBtn = document.getElementById("addBtn");
+    const taskInput = mainArea.querySelector('input[type="text"]');
 
-        if (event.key === 'Enter') {
-            createTask();                
+    if (!addBtn || !taskInput) return;
+
+    addBtn.addEventListener("click", function () {
+        createTask(taskInput);
+    });
+
+    taskInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            createTask(taskInput);
         }
-    })
-    
-    const addBtn = document.getElementById("addBtn")
-    addBtn.addEventListener("click", function(event){ //Add click event, listen to click on 'Add' button
-        createTask(); 
-    }); 
-
+    });
 }
 
 
-function createTask() {
-    if (textInput.value.length > 1 ) { 
-                
-        addNewTodo(textInput.value.trim());
-        
-        lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1 ]; 
-        createTaskTile(lastAddedList); 
 
-        textInput.value = " "; 
-        
+function createTask(inputElement) {
+    const taskTitle = inputElement.value.trim();
+
+    if (taskTitle.length > 1) {
+        addNewTodo(taskTitle);
+
+        lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1];
+        createTaskTile(lastAddedList);
+
+        inputElement.value = "";
     }
 }
 
@@ -363,4 +364,4 @@ function group() {
 }
 
 
-export {checkItemClicked, priorityIcon,textInput, lastAddedList, providedTitle, mainAreaClicks, addNewTask,createTaskTile} 
+export {checkItemClicked, priorityIcon, lastAddedList, providedTitle, mainAreaClicks, addNewTask,createTaskTile} 

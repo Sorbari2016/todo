@@ -8,7 +8,7 @@ import calendarIcon from "./images/calendar.png";
 import bellIcon from "./images/bell.png"; 
 import repeatIcon from "./images/repeat.png"; 
 import { format, compareAsc } from "date-fns";
-import {mainAreaClicks, addNewTask,textInput, providedTitle, lastAddedList} from "./script";
+import {mainAreaClicks, addNewTask, providedTitle, lastAddedList} from "./script";
 import allTasks from './module';
 
 
@@ -26,7 +26,7 @@ function clearMainArea() {
 }
 
 // Build the Main Area Section
-function renderMainAreanArea() {
+function renderMainArea() {
     mainArea.innerHTML = `
                 <div class="ribbon ribbon1 pry_mgn sdy_pad">
                     <div class="today item">
@@ -77,31 +77,44 @@ function renderMainAreanArea() {
 }
 
 // Method to handle outside clicks
+let outsideClickListener;
+
 function handleOutsideClick() {
-    document.addEventListener("click", (e) => {
-      const isInsideAllowedAreas = e.target.closest("#s") ||
-                                    e.target.closest("#g") ||
-                                    e.target.closest(".sort-dropdown") ||
-                                    e.target.closest(".group-dropdown") ||
-                                    e.target.closest("#search") || 
-                                    e.target.closest(".search-input");   // assumed input class
-  
-      if (!isInsideAllowedAreas) {
-        renderMainAreanArea();
-      }
-    });
-  }
+  if (outsideClickListener) return; 
+
+  outsideClickListener = (e) => {
+    const isInsideAllowedAreas = e.target.closest("#s") ||
+                                 e.target.closest("#g") ||
+                                 e.target.closest(".sort-dropdown") ||
+                                 e.target.closest(".group-dropdown") ||
+                                 e.target.closest("#search") || 
+                                 e.target.closest(".search-input") || 
+                                 e.target.closest("#mainArea") || 
+                                 e.target.closest(".add-btn") || 
+                                 e.target.closest("form") || 
+                                 e.target.closest("input") || 
+                                 e.target.closest("button");
+
+    if (!isInsideAllowedAreas) {
+      renderMainArea();
+    }
+  };
+
+  document.addEventListener("click", outsideClickListener);
+}
+
   
 
 // Exports
 export {
-    renderMainAreanArea, 
+    renderMainArea, 
     clearMainArea, 
+    handleOutsideClick, 
     mainArea, 
     sunnyIcon, 
     currentDay, 
     now, 
     sortIcon, 
     folderIcon, 
-    handleOutsideClick
+    outsideClickListener
 }; 
