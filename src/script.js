@@ -84,7 +84,7 @@ function createTaskTile(list) {
         <div class="title-area">
             <input type="checkbox" id="${checkboxId}" class="change">
             <div class="expand">
-                <p id="title-text">${list.title}</p>
+                <p class = "task-title">${list.title}</p>
             </div>        
             <button type="button">
                 <img src='${importantIcon}'>
@@ -96,15 +96,23 @@ function createTaskTile(list) {
 
     const expand = tile.querySelector(".expand");
     const checkBox = tile.querySelector(`#${checkboxId}`);
+    const titleText = tile.querySelector(".task-title");
 
-    // Pass the tile to addTaskDetails
+    if (list.checklist === true) {
+        checkBox.checked = true;
+        titleText.classList.add("strikethrough");
+    }
+
     expand.addEventListener("click", () => addTaskDetails(tile));
 
-    checkBox.addEventListener("change", function () {
-        updateTask(checkboxId);      
-        tile.querySelector("#title-text").classList.add("strikethrough"); 
-        mainArea.removeChild(tile); 
-    }); 
+    checkBox.addEventListener("change", () => {     //Add change event to the checkbox to update task
+        list.checklist = checkBox.checked;
+    
+        if (checkBox.checked) {
+            markTaskAsCompleted(list, tile, checkBox.checked);
+        }
+    });
+    
 }
 
 
@@ -142,6 +150,40 @@ function createTask(inputElement) {
         inputElement.value = "";
     }
 }
+
+
+// Create method to handle task checkbox click anywhere
+function markTaskAsCompleted(task, tileElement, isChecked) {
+    const titleElement = tileElement.querySelector(".task-title"); 
+
+    let completedTaskGroup = allTasks.find(group => group.groupTitle === "completedTasks");
+
+    if (!completedTaskGroup) {
+        completedTaskGroup = {
+            groupTitle: "completedTasks",
+            groupLists: []
+        };
+        allTasks.push(completedTaskGroup);
+    }
+
+    if (isChecked) {
+        task.chekclist = true; 
+        if (titleElement) titleElement.classList.add("strikethrough");
+        
+        tileElement.remove();
+
+        if (!completedTaskGroup.groupLists.includes(task)) {
+            completedTaskGroup.groupLists.push(task);
+        }
+    } else {
+        task.checklist = false; 
+        if (titleElement) titleElement.classList.remove("strikethrough");
+        mainArea.appendChild(tileElement);
+
+        completedTaskGroup.groupLists = completedTaskGroup.groupLists.filter(t => t !== task);
+    }
+}
+
 
 // Add click events to the main area click items
 mainAreaClicks(); 
@@ -230,7 +272,7 @@ function addTaskDetails(tile) {
     mainArea.appendChild(main);
 
     // Add date created
-    const formattedCreatedDate = `${format(lastAddedList.dateCreated, "eeee")}, ${format(lastAddedList.dateCreated, "MMMM d, yyyy")}`;
+    const formattedCreatedDate = `${format(lastAddedList.dateCreated, "eeee")} ${format(lastAddedList.dateCreated, "MMMM d, yyyy")}`;
     main.querySelector(".date_created").innerHTML = `<p>${formattedCreatedDate}</p>`;
 
     // Corrected textarea selector
@@ -258,17 +300,23 @@ function addTaskDetails(tile) {
 
 // Method to update the created list. 
 function updateTask(listProperty) {    
+
     const addedDetails  = document.createElement("p"); 
     document.querySelector(".other-details").append(addedDetails); 
 
-    const details = document.getElementById(listProperty)
+    const details = document.getElementById(listProperty); 
+    const tileElement = details.closest(".tile");
+
     if (listProperty === "checklist") {
-        lastAddedList[listProperty] = details.checked; 
+        const isChecked = details.checked;
+        lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1]; 
+        lastAddedList[listProperty] = isChecked;
+        markTaskAsCompleted(lastAddedList, tileElement, isChecked);   
     } else {
-        lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1 ];
+        lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1];
         lastAddedList[listProperty] = details.value;
     } 
-    details.disabled = true; 
+    // details.disabled = true; 
 
     
     addedDetails.textContent = lastAddedList[listProperty]; // Add updated details to tile
@@ -282,7 +330,6 @@ function updateTask(listProperty) {
     }     
 
 }
-
 
 
 // Function to checked the button click,and run a listener 

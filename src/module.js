@@ -108,9 +108,9 @@ function addNewTodo(
   allTasks[0].groupLists.push(task); // Combined tasks
 
   if (checklist) {
-    allTasks[3].groupLists.push(task);
+    allTasks[3].groupLists.push(task); // Completed tasks
   } else {
-    allTasks[4].groupLists.push(task);
+    allTasks[4].groupLists.push(task); // Uncomplted tasks
   }
 
   if (projectName !== "project") {
@@ -127,10 +127,13 @@ function addNewTodo(
   return task;
 }
 
+ 
+
 // Test Data
 const firstFolder = addNewFolder("Music");
 const firstTask = addNewTodo("Finish Web Dev", "Before the end of the year", "07/07/2025", "I will be really happy", "medium", false);
 const secondTask = addNewTodo("Marry");
+
 
 // Debug
 console.log(allTasks[0].groupLists);

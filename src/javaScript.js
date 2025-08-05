@@ -149,15 +149,16 @@ function queryAllTasks(array, sectionID) {
 
 
 // update the number of tasks 
-getNumberofTasks(); 
+getNumberOfTasks();
 
-function getNumberofTasks() {
-    document.querySelector("#no_of_comp").textContent = allTasks[3].groupLists.length;
+function getNumberOfTasks() {
+    const completedTasks = allTasks[3].groupLists.length;
+    document.querySelector("#no_of_comp").textContent = completedTasks; 
     document.querySelector("#no_of_up").textContent = allTasks[5].groupLists.length
     document.querySelector("#no_of_tod").textContent = allTasks[6].groupLists.length
 }
 
-
+console.log(allTasks[3].groupLists); 
 addNewTodo("Pray","", new Date(), "",  "", true); 
 
 export {addButtonTask}
