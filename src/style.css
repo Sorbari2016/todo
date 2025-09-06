@@ -118,9 +118,9 @@ input {
 }
 
 /* Positioning the second item of the lower section */
-.lower_section img {
+.lower_section button:last-child {
    grid-row: 4/5;
-   justify-self: right;
+   justify-self: right; 
 }
 
 /* Push the footer icons down */
@@ -133,6 +133,11 @@ footer {
    display: flex;
    justify-content: space-around;
 }
+
+.lower_section button:first-child, 
+.lower_section button:last-child {width: auto;}
+
+.lower_section button:first-child   {justify-self: self-start;} 
 
 /* MAIN AREA RULES */
 /* Layout for the top ribbon */

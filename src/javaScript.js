@@ -7,10 +7,15 @@ import { addNewTodo } from "./module";
 import allTasks from "./module";
 import { format, compareAsc } from "date-fns";
 
+let currentTab = 'mainArea'; 
+
 // Add Event delegation on the sidebar top section
 document.querySelector(".upper_section").addEventListener("click", function(event) {
     if (event.target.tagName === "BUTTON") {
         const buttonID = event.target.getAttribute("id")
+
+         currentTab = buttonID; 
+
         if (buttonID === "tasks") {
             checkItemClicked(buttonID); 
         } else  {
@@ -161,7 +166,7 @@ function getNumberOfTasks() {
 console.log(allTasks[3].groupLists); 
 addNewTodo("Pray","", new Date(), "",  "", true); 
 
-export {addButtonTask}
+export {addButtonTask, currentTab}
 
 
 

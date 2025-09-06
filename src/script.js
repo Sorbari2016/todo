@@ -14,7 +14,7 @@ import deleteIcon from "./images/trash.png";
 import { addNewTodo,addNewFolder } from "./module.js";
 import { format, compareAsc, add, differenceInCalendarDays } from "date-fns";
 import { clearMainArea,mainArea, sortIcon, handleOutsideClick,outsideClickListener, renderMainArea, createDetailBlock} from "./module2";
-import { addButtonTask } from "./javaScript.js";
+import { addButtonTask, currentTab } from "./javaScript.js";
 
 
 // Handle clicks outside 
@@ -59,9 +59,9 @@ function search() {
 
     const matchingTasks = allTasks[0].groupLists.filter(taskMatches); 
 
-    matchingTasks.forEach(function(task) {
+    matchingTasks.forEach(function(task, index ) {
     
-        createTaskTile(task);
+        createTaskTile(task, index);
         
     })
 }
@@ -72,11 +72,13 @@ let expand, checkBox, numberOfTiles = 0;
 
 
 // Method toa add a list tile, once a list is added this way
-function createTaskTile(list) {       
+function createTaskTile(list, index) {       
     const tile = document.createElement("div"); 
     Object.assign(tile, {
         className: "ribbon tile pry_mgn pry_pad"
     });
+
+    tile.dataset.index = index;
 
     const checkboxId = `checklist-${Date.now()}`; // unique ID
 
@@ -107,10 +109,9 @@ function createTaskTile(list) {
 
     checkBox.addEventListener("change", () => {     //Add change event to the checkbox to update task
         list.checklist = checkBox.checked;
-    
-        if (checkBox.checked) {
-            markTaskAsCompleted(list, tile, checkBox.checked);
-        }
+
+        markTaskAsCompleted(list, tile, checkBox.checked, currentTab);
+
     });
     
 }
@@ -145,44 +146,75 @@ function createTask(inputElement) {
         addNewTodo(taskTitle);
 
         lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1];
-        createTaskTile(lastAddedList);
+        createTaskTile(lastAddedList, allTasks[0].groupLists.length - 1);
 
         inputElement.value = "";
     }
 }
 
-
 // Create method to handle task checkbox click anywhere
-function markTaskAsCompleted(task, tileElement, isChecked) {
-    const titleElement = tileElement.querySelector(".task-title"); 
+function markTaskAsCompleted(task, tile, checked, currentTab) {
+    task.checklist = checked;
 
-    let completedTaskGroup = allTasks.find(group => group.groupTitle === "completedTasks");
-
-    if (!completedTaskGroup) {
-        completedTaskGroup = {
-            groupTitle: "completedTasks",
-            groupLists: []
-        };
-        allTasks.push(completedTaskGroup);
+    const titleText = tile.querySelector(".task-title");
+    if (checked) {
+        titleText.classList.add("strikethrough");
+    } else {
+        titleText.classList.remove("strikethrough");
     }
 
-    if (isChecked) {
-        task.chekclist = true; 
-        if (titleElement) titleElement.classList.add("strikethrough");
-        
-        tileElement.remove();
+    const today = new Date().toDateString();
+    const due = task.dueDate ? new Date(task.dueDate).toDateString() : null;
 
-        if (!completedTaskGroup.groupLists.includes(task)) {
-            completedTaskGroup.groupLists.push(task);
-        }
-    } else {
-        task.checklist = false; 
-        if (titleElement) titleElement.classList.remove("strikethrough");
-        mainArea.appendChild(tileElement);
+    switch (currentTab) {
+        case "mainArea":
+            if (checked) {
+                tile.remove();
+                moveTaskBetweenGroups(task, "uncompletedTasks", "completedTasks");
+            }
+            break;
 
-        completedTaskGroup.groupLists = completedTaskGroup.groupLists.filter(t => t !== task);
+        case "completed_tasks":
+            if (!checked) {
+                tile.remove();
+                moveTaskBetweenGroups(task, "completedTasks", "uncompletedTasks");
+            }
+            break;
+
+        case "today_tasks":
+            if (checked && due && due < today) {
+                tile.remove();
+                moveTaskBetweenGroups(task, "uncompletedTasks", "completedTasks");
+            }
+            // if due === today, it stays here
+            break;
+
+        case "upcoming_tasks":
+            if (checked) {
+                tile.remove();
+                moveTaskBetweenGroups(task, "uncompletedTasks", "completedTasks");
+            }
+            break;
     }
 }
+
+
+// Move a task from one group to another
+function moveTaskBetweenGroups(task, fromGroupTitle, toGroupTitle) {
+    const fromGroup = allTasks.find(g => g.groupTitle === fromGroupTitle);
+    const toGroup = allTasks.find(g => g.groupTitle === toGroupTitle);
+
+    if (!fromGroup || !toGroup) return; // safety check
+
+    // Remove from source group
+    fromGroup.groupLists = fromGroup.groupLists.filter(t => t !== task);
+
+    // Add to target group if not already there
+    if (!toGroup.groupLists.includes(task)) {
+        toGroup.groupLists.push(task);
+    }
+}
+
 
 
 // Add click events to the main area click items
@@ -208,7 +240,6 @@ function addTaskDetails(tile) {
     tile.querySelector(".title-area p").style.fontWeight = "bold"; 
 
     const ribbon2 = document.querySelector(".ribbon2");
-    ribbon2.innerHTML = "";
     ribbon2.innerHTML = `
         <div class="ribbon ribbon4 item pry_mgn sdy_pad">
             <button class="btn click">  
@@ -227,13 +258,16 @@ function addTaskDetails(tile) {
     leftMain.classList.add("left_main");
     rightMain.classList.add("right_main");
 
-    lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1];
+    // Get the current task from the tile's dataset
+    const taskIndex = parseInt(tile.dataset.index);
+    const currentGroup = allTasks[0].groupLists;
+    lastAddedList = currentGroup[taskIndex];
 
     rightMain.innerHTML = `
         <div id="list_header" class="details">
             <span>
-                <button type="type">
-                    <input type="checkbox" id="checklist2" class="change">
+                <button type="button">
+                    <input type="checkbox" id="checklist" class="change">
                 </button>
                 <h4>${lastAddedList.title}</h4>
                 <img src="${importantIcon}">
@@ -246,15 +280,13 @@ function addTaskDetails(tile) {
             icon: priorityIcon, 
             inputType: "select", 
             id: 'priority', 
-                options: [
-                    {value: "",  label: "Select Priority"},
-                    {value: "Top priority",  label: "Top priority"},
-                    {value: "Medium priority",  label: "Medium priority"}, 
-                    {value: "Low priority",  label: "Low priority"} 
-                ]
-            })
-        }
-
+            options: [
+                { value: "", label: "Select Priority" },
+                { value: "Top priority", label: "Top priority" },
+                { value: "Medium priority", label: "Medium priority" },
+                { value: "Low priority", label: "Low priority" }
+            ]
+        })}
         <hr/>
         <div id="footer">
             <footer>
@@ -265,70 +297,84 @@ function addTaskDetails(tile) {
                     </button> 
                 </span>
             </footer>
-        </div>`
+        </div>`;
 
     main.append(leftMain, rightMain);
     leftMain.append(ribbon, ribbon2, tile);
     mainArea.appendChild(main);
 
-    // Add date created
+    // Display the formatted date created
     const formattedCreatedDate = `${format(lastAddedList.dateCreated, "eeee")} ${format(lastAddedList.dateCreated, "MMMM d, yyyy")}`;
     main.querySelector(".date_created").innerHTML = `<p>${formattedCreatedDate}</p>`;
 
-    // Corrected textarea selector
-    const textareaInputs = document.querySelectorAll("textarea");
-    textareaInputs.forEach(textarea => {
+    // Event listener for Enter key on textareas
+    document.querySelectorAll("textarea").forEach(textarea => {
         textarea.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
-                const fieldFilled = this.getAttribute("id");
-                updateTask(fieldFilled);
+                const fieldFilled = this.id;
+                updateTask(fieldFilled, tile);
             }
         });
     });
 
-    // Change event listeners for fields with .change
-    const changeElements = document.querySelectorAll(".change");
-    changeElements.forEach(element => {
+    // Event listener for changes in any input (checkbox, date, select, etc.)
+    document.querySelectorAll(".change").forEach(element => {
         element.addEventListener("change", function () {
-            const detailField = this.getAttribute("id");
-            updateTask(detailField);
+            const detailField = this.id;
+            updateTask(detailField, tile);
         });
     });
+
+    // Pre-fill fields if values already exist
+    const desc = document.getElementById("description");
+    const note = document.getElementById("note");
+    const due = document.getElementById("dueDate");
+    const priority = document.getElementById("priority");
+    const checklist = document.getElementById("checklist");
+
+    if (desc) desc.value = lastAddedList.description || "";
+    if (note) note.value = lastAddedList.note || "";
+    if (due) due.value = lastAddedList.dueDate || "";
+    if (priority) priority.value = lastAddedList.priority || "";
+    if (checklist) checklist.checked = lastAddedList.checklist === true;
 }
 
 
-
 // Method to update the created list. 
-function updateTask(listProperty) {    
-
-    const addedDetails  = document.createElement("p"); 
-    document.querySelector(".other-details").append(addedDetails); 
-
-    const details = document.getElementById(listProperty); 
-    const tileElement = details.closest(".tile");
+function updateTask(listProperty, tileElement) {
+    const details = document.getElementById(listProperty);  
+    const taskIndex = parseInt(tileElement.dataset.index);
+    const currentGroup = allTasks[0].groupLists;
+    lastAddedList = currentGroup[taskIndex];
 
     if (listProperty === "checklist") {
         const isChecked = details.checked;
-        lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1]; 
         lastAddedList[listProperty] = isChecked;
-        markTaskAsCompleted(lastAddedList, tileElement, isChecked);   
+
+        const titleText = tileElement.querySelector(".task-title");
+        if (isChecked) {
+            titleText.classList.add("strikethrough");
+            tileElement.remove(); // Remove tile if completed
+        } else {
+            titleText.classList.remove("strikethrough");
+        }
+
+        markTaskAsCompleted(lastAddedList, tileElement, isChecked, currentTab);
+
     } else {
-        lastAddedList = allTasks[0].groupLists[allTasks[0].groupLists.length - 1];
+        // Handle regular field updates
         lastAddedList[listProperty] = details.value;
-    } 
-    // details.disabled = true; 
 
-    
-    addedDetails.textContent = lastAddedList[listProperty]; // Add updated details to tile
-   
-    if (listProperty === "dueDate") {                     // Reset the inputs
-        details.value = format(new Date(), "yyyy-MM-dd")
-    } else if (listProperty === "priority") {
-        
-    } else {
-        details.value = details.ariaPlaceholder;
-    }     
+        const detailDisplay = document.createElement("p");
+        detailDisplay.textContent = details.value;
+        tileElement.querySelector(".other-details").appendChild(detailDisplay);
 
+        if (listProperty === "dueDate") {
+            details.value = format(new Date(), "yyyy-MM-dd");
+        } else if (listProperty !== "priority") {
+            details.value = details.getAttribute("aria-placeholder") || "";
+        }
+    }
 }
 
 
