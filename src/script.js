@@ -72,21 +72,22 @@ let expand, checkBox, numberOfTiles = 0;
 
 
 // Method toa add a list tile, once a list is added this way
-function createTaskTile(list, index) {       
+function createTaskTile(task, index = 0, currentTab = "mainArea") {       
     const tile = document.createElement("div"); 
     Object.assign(tile, {
         className: "ribbon tile pry_mgn pry_pad"
     });
 
-    tile.dataset.index = index;
+    task.id = task.id || Date.now() + Math.random().toString(36).substring(2, 9); 
+    tile.dataset.id = task.id; // used instead of dataset.index
 
-    const checkboxId = `checklist-${Date.now()}`; // unique ID
+    const checkboxId = `checklist-${Date.now()}-${index}`; // unique ID
 
     tile.innerHTML = `
         <div class="title-area">
             <input type="checkbox" id="${checkboxId}" class="change">
             <div class="expand">
-                <p class = "task-title">${list.title}</p>
+                <p class="task-title">${task.title}</p>
             </div>        
             <button type="button">
                 <img src='${importantIcon}'>
@@ -100,20 +101,22 @@ function createTaskTile(list, index) {
     const checkBox = tile.querySelector(`#${checkboxId}`);
     const titleText = tile.querySelector(".task-title");
 
-    if (list.checklist === true) {
+    //  Sync completed state
+    if (task.checklist === true) {
         checkBox.checked = true;
         titleText.classList.add("strikethrough");
     }
 
-    expand.addEventListener("click", () => addTaskDetails(tile));
-
-    checkBox.addEventListener("change", () => {     //Add change event to the checkbox to update task
-        list.checklist = checkBox.checked;
-
-        markTaskAsCompleted(list, tile, checkBox.checked, currentTab);
-
+    //  Open details view on click
+    expand.addEventListener("click", () => {
+        viewTaskDetails(tile, task, currentTab);
     });
-    
+
+    // Checkbox updates completion state
+    checkBox.addEventListener("change", () => {     
+        const isChecked = checkBox.checked;
+        updateTask(task, "checklist", isChecked, tile, currentTab);
+    });
 }
 
 
@@ -199,6 +202,7 @@ function markTaskAsCompleted(task, tile, checked, currentTab) {
 }
 
 
+
 // Move a task from one group to another
 function moveTaskBetweenGroups(task, fromGroupTitle, toGroupTitle) {
     const fromGroup = allTasks.find(g => g.groupTitle === fromGroupTitle);
@@ -234,12 +238,20 @@ function mainAreaClicks() {
     }
 }
 
+console.log(currentTab); 
 //To view/Add list details
-function addTaskDetails(tile) {
+function viewTaskDetails(tile, task, tab) {
     tile.style.height = "10rem"; 
     tile.querySelector(".title-area p").style.fontWeight = "bold"; 
 
-    const ribbon2 = document.querySelector(".ribbon2");
+    let ribbon2 = document.querySelector(".ribbon2");
+
+    if (!ribbon2) {
+        ribbon2 = document.createElement("div");
+        ribbon2.classList.add("ribbon2");
+        mainArea.prepend(ribbon2);
+    }
+
     ribbon2.innerHTML = `
         <div class="ribbon ribbon4 item pry_mgn sdy_pad">
             <button class="btn click">  
@@ -249,7 +261,6 @@ function addTaskDetails(tile) {
         </div>`;
 
     const ribbon = document.querySelector(".ribbon");
-
     const main = document.createElement("div");
     const leftMain = document.createElement("div");
     const rightMain = document.createElement("div");
@@ -258,18 +269,11 @@ function addTaskDetails(tile) {
     leftMain.classList.add("left_main");
     rightMain.classList.add("right_main");
 
-    // Get the current task from the tile's dataset
-    const taskIndex = parseInt(tile.dataset.index);
-    const currentGroup = allTasks[0].groupLists;
-    lastAddedList = currentGroup[taskIndex];
-
     rightMain.innerHTML = `
         <div id="list_header" class="details">
             <span>
-                <button type="button">
-                    <input type="checkbox" id="checklist" class="change">
-                </button>
-                <h4>${lastAddedList.title}</h4>
+                <input type="checkbox" id="checklist-detail" class="change" ${task.checklist ? "checked" : ""}>
+                <h4>${task.title}</h4>
                 <img src="${importantIcon}">
             </span> 
         </div>
@@ -303,76 +307,87 @@ function addTaskDetails(tile) {
     leftMain.append(ribbon, ribbon2, tile);
     mainArea.appendChild(main);
 
-    // Display the formatted date created
-    const formattedCreatedDate = `${format(lastAddedList.dateCreated, "eeee")} ${format(lastAddedList.dateCreated, "MMMM d, yyyy")}`;
+    // Fill existing details
+    document.getElementById("description").value = task.description || "";
+    document.getElementById("note").value = task.note || "";
+    document.getElementById("dueDate").value = task.dueDate || "";
+    document.getElementById("priority").value = task.priority || "";
+
+    // Show formatted creation date
+    const formattedCreatedDate = `${format(task.dateCreated, "eeee")} ${format(task.dateCreated, "MMMM d, yyyy")}`;
     main.querySelector(".date_created").innerHTML = `<p>${formattedCreatedDate}</p>`;
 
-    // Event listener for Enter key on textareas
+    // Event listeners
+    document.querySelectorAll(".change").forEach(element => {
+        element.addEventListener("change", function () {
+            const field = this.id === "checklist-detail" ? "checklist" : this.id;
+            const value = (this.type === "checkbox") ? this.checked : this.value;
+
+            updateTask(task, field, value, tile, currentTab);
+        });
+    });
+
     document.querySelectorAll("textarea").forEach(textarea => {
         textarea.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
-                const fieldFilled = this.id;
-                updateTask(fieldFilled, tile);
+                updateTask(task, this.id, this.value, tile, currentTab);
             }
         });
     });
-
-    // Event listener for changes in any input (checkbox, date, select, etc.)
-    document.querySelectorAll(".change").forEach(element => {
-        element.addEventListener("change", function () {
-            const detailField = this.id;
-            updateTask(detailField, tile);
-        });
-    });
-
-    // Pre-fill fields if values already exist
-    const desc = document.getElementById("description");
-    const note = document.getElementById("note");
-    const due = document.getElementById("dueDate");
-    const priority = document.getElementById("priority");
-    const checklist = document.getElementById("checklist");
-
-    if (desc) desc.value = lastAddedList.description || "";
-    if (note) note.value = lastAddedList.note || "";
-    if (due) due.value = lastAddedList.dueDate || "";
-    if (priority) priority.value = lastAddedList.priority || "";
-    if (checklist) checklist.checked = lastAddedList.checklist === true;
 }
 
 
 // Method to update the created list. 
-function updateTask(listProperty, tileElement) {
-    const details = document.getElementById(listProperty);  
-    const taskIndex = parseInt(tileElement.dataset.index);
-    const currentGroup = allTasks[0].groupLists;
-    lastAddedList = currentGroup[taskIndex];
+function updateTask(task, field, value, tile, currentTab) {
+    // Update task object
+    task[field] = value;
 
-    if (listProperty === "checklist") {
-        const isChecked = details.checked;
-        lastAddedList[listProperty] = isChecked;
+    // Special handling for checklist
+    if (field === "checklist") {
+        const isChecked = value;
 
-        const titleText = tileElement.querySelector(".task-title");
+        // Toggle strikethrough
+        const titleText = tile.querySelector(".task-title");
         if (isChecked) {
             titleText.classList.add("strikethrough");
-            tileElement.remove(); // Remove tile if completed
         } else {
             titleText.classList.remove("strikethrough");
         }
 
-        markTaskAsCompleted(lastAddedList, tileElement, isChecked, currentTab);
+        // Delegate to markTaskAsCompleted for group movements
+        markTaskAsCompleted(task, tile, isChecked, currentTab);
+        return; // checklist handled fully
+    }
 
-    } else {
-        // Handle regular field updates
-        lastAddedList[listProperty] = details.value;
+    // Update UI tile with new value
+    syncTileDetails(tile, field, value);
 
+    // Show update in `.other-details` (like your original version)
+    if (field !== "priority" && field !== "dueDate") {
         const detailDisplay = document.createElement("p");
-        detailDisplay.textContent = details.value;
-        tileElement.querySelector(".other-details").appendChild(detailDisplay);
+        detailDisplay.textContent = value;
+        tile.querySelector(".other-details").appendChild(detailDisplay);
+    }
+}
 
-        if (listProperty === "dueDate") {
-            details.value = format(new Date(), "yyyy-MM-dd");
-        } else if (listProperty !== "priority") {
-            details.value = details.getAttribute("aria-placeholder") || "";
+
+function syncTileDetails(tile, field, value) {
+    if (field === "title") {
+        const titleEl = tile.querySelector(".task-title");
+        if (titleEl) titleEl.textContent = value;
+    }
+
+    if (field === "dueDate") {
+        const dueEl = tile.querySelector(".task-due");
+        if (dueEl) {
+            dueEl.textContent = value ? new Date(value).toDateString() : "";
+        }
+    }
+
+    if (field === "priority") {
+        const priorityEl = tile.querySelector(".task-priority");
+        if (priorityEl) {
+            priorityEl.textContent = value || "No priority";
         }
     }
 }

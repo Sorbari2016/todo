@@ -8,13 +8,13 @@ import allTasks from "./module";
 import { format, compareAsc } from "date-fns";
 
 let currentTab = 'mainArea'; 
-
+ 
 // Add Event delegation on the sidebar top section
 document.querySelector(".upper_section").addEventListener("click", function(event) {
     if (event.target.tagName === "BUTTON") {
         const buttonID = event.target.getAttribute("id")
 
-         currentTab = buttonID; 
+        currentTab = buttonID;
 
         if (buttonID === "tasks") {
             checkItemClicked(buttonID); 
@@ -99,7 +99,7 @@ function addButtonTask() {
                 if (newListPriorityLevel === "Priority") {
                     newListPriorityLevel = "medium"; 
                     addNewTodo(newListTitle,newListDescription, new Date(newListDueDate), newListNotes,newListPriorityLevel, newListCheck);
-                    alert("Your List has been created ! ")
+                    alert("Your List has been created ! "); 
                     clearMainArea();
                     renderMainArea();
                 } else {
@@ -149,22 +149,36 @@ function queryAllTasks(array, sectionID) {
     }
 
     return filteredList 
-} 
-
-
-
-// update the number of tasks 
-getNumberOfTasks();
-
-function getNumberOfTasks() {
-    const completedTasks = allTasks[3].groupLists.length;
-    document.querySelector("#no_of_comp").textContent = completedTasks; 
-    document.querySelector("#no_of_up").textContent = allTasks[5].groupLists.length
-    document.querySelector("#no_of_tod").textContent = allTasks[6].groupLists.length
 }
 
-console.log(allTasks[3].groupLists); 
-addNewTodo("Pray","", new Date(), "",  "", true); 
+updateTimeBaseTasks();
+
+function updateTimeBaseTasks() {
+    const tasks = allTasks[0].groupLists;
+    const today = new Date().toDateString(); 
+
+    for (let task of tasks) {
+        if (new Date (task.dueDate).toDateString() === today){
+            allTasks[6].groupLists.push(task)
+        } else if (new Date (task.dueDate).toDateString() > today) {
+            allTasks[5].groupLists.push(task); 
+    }
+  }
+
+}
+
+
+// update the number of tasks
+document.querySelector("#no_of_comp").textContent = getNumberOfTasks(3); 
+document.querySelector("#no_of_up").textContent = getNumberOfTasks(5); 
+document.querySelector("#no_of_tod").textContent = getNumberOfTasks(6);  
+
+
+
+function getNumberOfTasks(groupIndex) {
+     return allTasks[groupIndex].groupLists.length; 
+}
+
 
 export {addButtonTask, currentTab}
 

@@ -67,7 +67,7 @@ class NewFolder extends Folder {
 class GroupedTasks {
   constructor(groupTitle) {
     this.groupTitle = groupTitle;
-    this.groupLists = [];
+    this.groupLists = new Array(); 
   }
 }
 
@@ -128,12 +128,11 @@ function addNewTodo(
 }
 
  
-
 // Test Data
 const firstFolder = addNewFolder("Music");
 const firstTask = addNewTodo("Finish Web Dev", "Before the end of the year", "07/07/2025", "I will be really happy", "medium", false);
 const secondTask = addNewTodo("Marry");
-
+addNewTodo("Pray","", new Date(), "",  "", true); 
 
 // Debug
 console.log(allTasks[0].groupLists);
