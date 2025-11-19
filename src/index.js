@@ -1,12 +1,16 @@
 // ENTRY FILE
+import './module.js';
 
 import './style.css'; 
-
-import './module.js'; 
 
 import './script.js'; 
 
 import './javaScript.js'; 
+
+import saveToLocalStorage from './module.js';
+
+
+
 
 
 

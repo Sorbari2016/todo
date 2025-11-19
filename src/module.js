@@ -2,6 +2,7 @@
 
 // Imports
 import { format } from "date-fns";
+ 
 
 // Models
 class Todo {
@@ -9,9 +10,25 @@ class Todo {
     this.dateCreated = format(new Date(), "MM/dd/yyyy");
     this.title = title;
     this.description = description;
-    this.dueDate = format(new Date(dueDate), "MM/dd/yyyy");
+    this.dueDate =
+      dueDate instanceof Date
+        ? format(dueDate, "MM/dd/yyyy")
+        : dueDate;
     this.note = note;
     this.priority = priority;
+  }
+
+  // Restore base Todo fields from parsed JSON
+   static fromJSON(data) {
+    const todo = new Todo(
+      data.title,
+      data.description,
+      data.dueDate,
+      data.note,
+      data.priority
+    );
+    todo.dateCreated = data.dateCreated
+    return todo;
   }
 }
 
@@ -19,6 +36,21 @@ class TodoList extends Todo {
   constructor(title, description, dueDate, note, priority, checklist) {
     super(title, description, dueDate, note, priority);
     this.checklist = checklist;
+  }
+
+   // Restore TodoList INCLUDING inherited Todo props
+  static fromJSON(data) {
+    const restored = new TodoList(
+      data.title,
+      data.description,
+      data.dueDate,
+      data.note,
+      data.priority,
+      data.checklist
+    );
+
+    restored.dateCreated = data.dateCreated; 
+    return restored;
   }
 
   priorityLevel() {
@@ -123,20 +155,63 @@ function addNewTodo(
   } else {
     allTasks[1].groupLists.push(task);
   }
+  saveToLocalStorage(); 
 
   return task;
 }
 
+
+
+// Create method to save lists to localStorage
+function saveToLocalStorage() {
+  try {
+    localStorage.setItem("allTasks", JSON.stringify(allTasks));
+  } catch (err) {
+    console.error("Failed to save allTasks:", err);
+  }
+}
+
+
+// Create method to load lists from localStorage
+function loadFromLocalStorage() {
+  const raw = localStorage.getItem("allTasks");
+  if (!raw) return;
+
+  try {
+    const parsed = JSON.parse(raw);
+
+    parsed.forEach(group => {
+      group.groupLists = group.groupLists.map(obj => TodoList.fromJSON(obj));
+    });
+
+    // Mutate imported allTasks array instead of reassigning
+    allTasks.length = 0;
+    allTasks.push(...parsed);
+
+  } catch (err) {
+    console.error("Failed to load or parse allTasks from localStorage:", err);
+  }
+}
  
-// Test Data
-const firstFolder = addNewFolder("Music");
-const firstTask = addNewTodo("Finish Web Dev", "Before the end of the year", "07/07/2025", "I will be really happy", "medium", false);
-const secondTask = addNewTodo("Marry");
-addNewTodo("Pray","", new Date(), "",  "", true); 
+
+loadFromLocalStorage();
+
+
+// Only add demo/test data if no saved data exists
+if (allTasks[0].groupLists.length === 0) {
+  const firstFolder = addNewFolder("Music");
+  const firstTask = addNewTodo("Finish Web Dev", "Before the end of the year", "07/07/2025", "I will be really happy", "medium", false);
+  const secondTask = addNewTodo("Marry");
+  addNewTodo("Pray","", new Date(), "",  "", true);
+}
+
+
 
 // Debug
 console.log(allTasks[0].groupLists);
 
+console.log(allTasks); 
+
 // Exports
-export default allTasks;
-export { addNewFolder, addNewTodo };
+export { allTasks, addNewFolder, addNewTodo};
+export default saveToLocalStorage; 

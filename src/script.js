@@ -1,7 +1,6 @@
 // DOM STUFFS
 
 // Imports
-import allTasks from "./module.js";
 import calendarIcon from "./images/calendar.png";
 import descriptionIcon from "./images/description.png"; 
 import notesICon from "./images/notes.png"; 
@@ -11,11 +10,11 @@ import originDateIcon from "./images/creation.png";
 import categoryIcon from "./images/category.png"; 
 import importantIcon from "./images/important_icon.png"; 
 import deleteIcon from "./images/trash.png"; 
-import { addNewTodo,addNewFolder } from "./module.js";
+import { addNewTodo,addNewFolder, allTasks } from "./module.js";
 import { format, compareAsc, add, differenceInCalendarDays } from "date-fns";
 import { clearMainArea,mainArea, sortIcon, handleOutsideClick,outsideClickListener, renderMainArea, createDetailBlock} from "./module2";
 import { addButtonTask, currentTab } from "./javaScript.js";
-
+import saveToLocalStorage from "./module.js"; 
 
 // Handle clicks outside 
 handleOutsideClick(); 
@@ -129,11 +128,11 @@ function addNewTask() {
 
     if (!addBtn || !taskInput) return;
 
-    addBtn.addEventListener("click", function () {
+    addBtn.addEventListener("click", () => {
         createTask(taskInput);
     });
 
-    taskInput.addEventListener("keydown", function (event) {
+    taskInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             createTask(taskInput);
         }
@@ -238,10 +237,10 @@ function mainAreaClicks() {
     }
 }
 
-console.log(currentTab); 
+ 
 //To view/Add list details
 function viewTaskDetails(tile, task, tab) {
-    tile.style.height = "10rem"; 
+    tile.focus();  
     tile.querySelector(".title-area p").style.fontWeight = "bold"; 
 
     let ribbon2 = document.querySelector(".ribbon2");
@@ -303,9 +302,10 @@ function viewTaskDetails(tile, task, tab) {
             </footer>
         </div>`;
 
+    mainArea.appendChild(main);
     main.append(leftMain, rightMain);
     leftMain.append(ribbon, ribbon2, tile);
-    mainArea.appendChild(main);
+    
 
     // Fill existing details
     document.getElementById("description").value = task.description || "";
@@ -367,7 +367,8 @@ function updateTask(task, field, value, tile, currentTab) {
         const detailDisplay = document.createElement("p");
         detailDisplay.textContent = value;
         tile.querySelector(".other-details").appendChild(detailDisplay);
-    }
+    }; 
+    saveToLocalStorage(); 
 }
 
 

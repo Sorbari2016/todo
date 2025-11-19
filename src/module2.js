@@ -9,7 +9,7 @@ import bellIcon from "./images/bell.png";
 import repeatIcon from "./images/repeat.png"; 
 import { format, compareAsc } from "date-fns";
 import {mainAreaClicks, addNewTask, providedTitle, lastAddedList} from "./script";
-import allTasks from './module';
+import {allTasks} from './module';
 
 
 // Add the current day, & Date to the main area

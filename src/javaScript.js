@@ -3,8 +3,7 @@
 // IMPORTS 
 import { checkItemClicked, priorityIcon,createTaskTile } from "./script";
 import { clearMainArea, mainArea, renderMainArea, currentDay, now}  from "./module2";
-import { addNewTodo } from "./module";
-import allTasks from "./module";
+import { addNewTodo, allTasks } from "./module";
 import { format, compareAsc } from "date-fns";
 
 let currentTab = 'mainArea'; 
@@ -151,8 +150,6 @@ function queryAllTasks(array, sectionID) {
     return filteredList 
 }
 
-updateTimeBaseTasks();
-
 function updateTimeBaseTasks() {
     const tasks = allTasks[0].groupLists;
     const today = new Date().toDateString(); 
@@ -167,12 +164,11 @@ function updateTimeBaseTasks() {
 
 }
 
-
 // update the number of tasks
 document.querySelector("#no_of_comp").textContent = getNumberOfTasks(3); 
 document.querySelector("#no_of_up").textContent = getNumberOfTasks(5); 
 document.querySelector("#no_of_tod").textContent = getNumberOfTasks(6);  
-
+ 
 
 
 function getNumberOfTasks(groupIndex) {
@@ -180,7 +176,7 @@ function getNumberOfTasks(groupIndex) {
 }
 
 
-export {addButtonTask, currentTab}
+export {addButtonTask, currentTab}; 
 
 
 
